@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HighLife USB Simulator</title>
+    <title>HighLife Data Crack</title>
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
@@ -12,75 +12,17 @@
 
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@800&display=swap');
-        
-        body {
-            margin: 0;
-            background-color: #101010;
-            color: #fff;
-            font-family: 'Orbitron', sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            overflow: hidden;
-        }
-
-        .game-wrapper { text-align: center; width: 100%; max-width: 500px; }
-        .title { font-size: 2.5rem; margin: 0; text-transform: uppercase; }
-        .subtitle { color: yellow; margin-bottom: 20px; font-size: 0.9rem; }
-
-        .crack-container {
-            position: relative;
-            background-color: #202020;
-            border: 3px solid red;
-            height: 400px;
-            display: grid;
-            grid-template-columns: repeat(6, 1fr);
-            overflow: hidden;
-        }
-
-        .target-bar {
-            position: absolute;
-            width: 100%;
-            height: 35px;
-            background-color: rgba(255, 0, 0, 0.8);
-            top: 182px;
-            z-index: 5;
-        }
-
-        .slider-column {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            height: 100%;
-        }
-
-        .white-part {
-            background-color: white;
-            width: 40px;
-            height: 100px;
-        }
-
+        body { margin: 0; background-color: #101010; color: white; font-family: 'Orbitron', sans-serif; overflow: hidden; display: flex; justify-content: center; align-items: center; height: 100vh; }
+        .content { text-align: center; width: 100%; max-width: 600px; }
+        .crack-container { position: relative; background-color: #202020; border: 3px solid red; height: 400px; display: grid; grid-template-columns: repeat(6, 1fr); }
+        .target-bar { position: absolute; width: 100%; height: 35px; background: rgba(255, 0, 0, 0.8); top: 182px; z-index: 5; }
+        .slider-column { display: flex; flex-direction: column; align-items: center; height: 100%; }
+        .part { background-color: white; width: 45px; height: 100px; }
         .spacer { height: 50px; }
-
-        .active .white-part {
-            border: 3px solid #e6e600;
-            box-shadow: 0 0 10px #e6e600;
-        }
-
-        .win-overlay {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            color: #00ff00;
-            font-size: 2.5rem;
-            z-index: 10;
-            text-shadow: 0 0 20px #00ff00;
-            animation: blink 0.5s infinite;
-        }
-
-        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+        .active .part { border: 4px solid yellow; box-shadow: 0 0 15px yellow; }
+        .win-message { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: #00ff00; font-size: 2.5rem; z-index: 10; text-shadow: 0 0 20px #00ff00; }
+        .title { font-size: 3em; margin: 0; }
+        .catch-phrase { color: yellow; margin-bottom: 20px; }
     </style>
 </head>
 <body>
@@ -91,72 +33,62 @@
 
         const App = () => {
             const [activeIndex, setActiveIndex] = useState(0);
-            const [gameWon, setGameWon] = useState(false);
-            const columnRefs = useRef([...Array(6)].map(() => React.createRef()));
+            const [won, setWon] = useState(false);
+            const bars = [0, 1, 2, 3, 4, 5];
+            const refs = useRef(bars.map(() => React.createRef()));
             const animations = useRef([]);
 
             useEffect(() => {
-                // Initialize animations
-                animations.current = [0,1,2,3,4,5].map((i) => {
-                    return anime({
-                        targets: `#col-${i}`,
-                        translateY: [0, 150],
-                        duration: 600 - (i * 75),
-                        direction: 'alternate',
-                        loop: true,
-                        easing: 'easeInOutSine',
-                        autoplay: true
-                    });
-                });
-            }, [gameWon]);
+                animations.current = bars.map((i) => anime({
+                    targets: `#col-${i}`,
+                    translateY: [0, 150],
+                    duration: 550 - (i * 70),
+                    direction: 'alternate',
+                    loop: true,
+                    easing: 'easeInOutSine'
+                }));
+            }, [won]);
 
             useEffect(() => {
-                const handleKeyDown = (e) => {
-                    if (e.code === 'Space' && !gameWon) {
+                const handleKey = (e) => {
+                    if (e.code === 'Space' && !won) {
                         e.preventDefault();
-                        const rect = columnRefs.current[activeIndex].current.getBoundingClientRect();
-                        const containerRect = document.querySelector('.crack-container').getBoundingClientRect();
-                        const relativeTop = rect.top - containerRect.top;
+                        const rect = refs.current[activeIndex].current.getBoundingClientRect();
+                        const container = document.querySelector('.crack-container').getBoundingClientRect();
+                        const topPos = rect.top - container.top;
 
-                        // Red bar is at 182px, we check if the gap is roughly there
-                        if (relativeTop > 140 && relativeTop < 220) {
+                        if (topPos > 140 && topPos < 220) {
                             animations.current[activeIndex].pause();
                             if (activeIndex === 5) {
-                                setGameWon(true);
-                                setTimeout(() => {
-                                    setGameWon(false);
-                                    setActiveIndex(0);
-                                }, 2000);
-                            } else {
-                                setActiveIndex(activeIndex + 1);
-                            }
+                                setWon(true);
+                                setTimeout(() => { setWon(false); setActiveIndex(0); }, 2500);
+                            } else { setActiveIndex(activeIndex + 1); }
                         } else if (activeIndex > 0) {
                             animations.current[activeIndex - 1].play();
                             setActiveIndex(activeIndex - 1);
                         }
                     }
                 };
-
-                window.addEventListener('keydown', handleKeyDown);
-                return () => window.removeEventListener('keydown', handleKeyDown);
-            }, [activeIndex, gameWon]);
+                window.addEventListener('keydown', handleKey);
+                return () => window.removeEventListener('keydown', handleKey);
+            }, [activeIndex, won]);
 
             return (
-                <div className="game-wrapper">
+                <div className="content">
                     <h1 className="title">Data Crack</h1>
-                    <p className="subtitle">Selling your secrets since 1996</p>
+                    <p className="catch-phrase">Selling your secrets since 1996</p>
                     <div className="crack-container">
-                        <div className="target-bar"></div>
-                        {gameWon && <div className="win-overlay">WINNER WINNER</div>}
-                        {[0,1,2,3,4,5].map((i) => (
+                        <div className="target-bar" />
+                        {won && <div className="win-message">WINNER WINNER</div>}
+                        {bars.map((i) => (
                             <div key={i} id={`col-${i}`} className={`slider-column ${i === activeIndex ? 'active' : ''}`}>
-                                <div className="white-part"></div>
-                                <div className="spacer" ref={columnRefs.current[i]}></div>
-                                <div className="white-part"></div>
+                                <div className="part" />
+                                <div className="spacer" ref={refs.current[i]} />
+                                <div className="part" />
                             </div>
                         ))}
                     </div>
-                    <p style={{marginTop: '20px'}}>PRESS SPACE TO HACK</p>
+                    <p style={{marginTop:'20px'}}>PRESS SPACE TO HACK</p>
                 </div>
             );
         };
