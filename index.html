@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HighLife Data Crack - Fixed Restart</title>
+    <title>HighLife Data Crack - Snap Version</title>
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
@@ -33,7 +33,7 @@
         }
 
         .slider-column { display: flex; flex-direction: column; align-items: center; height: 100%; }
-        .part { background-color: white; width: 45px; height: 100px; transition: background-color 0.2s; }
+        .part { background-color: white; width: 45px; height: 100px; }
         .spacer { height: 50px; } 
 
         .active .part { 
@@ -41,7 +41,8 @@
             width: 37px; height: 92px;
         }
 
-        .locked .part { background-color: #00ff00; box-shadow: 0 0 10px #00ff00; }
+        /* Removed the green color change as requested */
+        .locked .part { background-color: white; }
 
         .win-message { 
             position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); 
@@ -66,12 +67,8 @@
             const refs = useRef(bars.map(() => React.createRef()));
             const animations = useRef([]);
 
-            // RESET LOGIC: This cleans up old animations properly
             const initGame = () => {
-                // Remove any existing animations from memory
                 animations.current.forEach(anim => anim.pause());
-                
-                // Create new animations
                 animations.current = bars.map((i) => anime({
                     targets: `#col-${i}`,
                     translateY: [0, 150],
@@ -85,9 +82,8 @@
 
             useEffect(() => {
                 initGame();
-                // Cleanup function when component unmounts
                 return () => animations.current.forEach(anim => anim.pause());
-            }, [won]); // Re-runs when 'won' changes back to false
+            }, [won]);
 
             useEffect(() => {
                 const handleKey = (e) => {
@@ -100,20 +96,30 @@
                         const coreCenter = coreRect.top + (coreRect.height / 2);
                         const targetCenter = targetRect.top + (targetRect.height / 2);
 
-                        const strictWindow = targetRect.height * 0.30; 
-                        const isHit = Math.abs(coreCenter - targetCenter) < strictWindow;
+                        // Success gap is a "tab bigger" - increased from 0.30 to 0.45
+                        const hitZone = targetRect.height * 0.45; 
+                        const isHit = Math.abs(coreCenter - targetCenter) < hitZone;
 
                         if (isHit) {
+                            // STOP and SNAP to center
                             animations.current[activeIndex].pause();
+                            
+                            // Visual Snap: Force the translateY to exactly 75px (the middle)
+                            anime({
+                                targets: `#col-${activeIndex}`,
+                                translateY: 75,
+                                duration: 50,
+                                easing: 'easeOutQuad'
+                            });
+
                             setLockedBars(prev => [...prev, activeIndex]);
                             
                             if (activeIndex === 5) {
                                 setWon(true);
-                                // The restart timer
                                 setTimeout(() => { 
                                     setLockedBars([]);
                                     setActiveIndex(0);
-                                    setWon(false); // This triggers the useEffect to call initGame()
+                                    setWon(false);
                                 }, 2000);
                             } else { 
                                 setActiveIndex(activeIndex + 1); 
@@ -139,7 +145,7 @@
                         {won && <div className="win-message">WINNER WINNER</div>}
                         {bars.map((i) => (
                             <div 
-                                key={`${won}-${i}`} // Changing the key forces React to redraw the bar
+                                key={`${won}-${i}`}
                                 id={`col-${i}`} 
                                 className={`slider-column ${i === activeIndex ? 'active' : ''} ${lockedBars.includes(i) ? 'locked' : ''}`}
                             >
