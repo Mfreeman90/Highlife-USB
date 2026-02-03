@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HighLife Data Crack</title>
+    <title>Data Crack Simulator</title>
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
@@ -13,7 +13,7 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@800&display=swap');
         body { margin: 0; background-color: #101010; color: white; font-family: 'Orbitron', sans-serif; overflow: hidden; display: flex; justify-content: center; align-items: center; height: 100vh; }
-        .content { text-align: center; width: 100%; max-width: 600px; }
+        .content { text-align: center; width: 100%; max-width: 500px; }
         .crack-container { position: relative; background-color: #202020; border: 3px solid red; height: 400px; display: grid; grid-template-columns: repeat(6, 1fr); }
         .target-bar { position: absolute; width: 100%; height: 35px; background: rgba(255, 0, 0, 0.8); top: 182px; z-index: 5; }
         .slider-column { display: flex; flex-direction: column; align-items: center; height: 100%; }
@@ -21,8 +21,8 @@
         .spacer { height: 50px; }
         .active .part { border: 4px solid yellow; box-shadow: 0 0 15px yellow; }
         .win-message { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: #00ff00; font-size: 2.5rem; z-index: 10; text-shadow: 0 0 20px #00ff00; }
-        .title { font-size: 3em; margin: 0; }
-        .catch-phrase { color: yellow; margin-bottom: 20px; }
+        .title { font-size: 2.5em; margin: 0; }
+        .catch-phrase { color: yellow; margin-bottom: 20px; font-size: 0.8rem; }
     </style>
 </head>
 <body>
@@ -42,7 +42,7 @@
                 animations.current = bars.map((i) => anime({
                     targets: `#col-${i}`,
                     translateY: [0, 150],
-                    duration: 550 - (i * 70),
+                    duration: 550 - (i * 75), // Slower speed as requested
                     direction: 'alternate',
                     loop: true,
                     easing: 'easeInOutSine'
