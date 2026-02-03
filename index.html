@@ -69,10 +69,14 @@
             const initGame = () => {
                 animations.current.forEach(anim => anim.pause());
                 animations.current = bars.map((i) => {
-                    // Original base was 550. 
-                    // Now: Bars 0, 1, 2 (1st, 2nd, 3rd) are sped up to base 480.
-                    // Bars 4, 5, 6 remain on the original 550 curve.
-                    const baseSpeed = i < 3 ? 480 : 550;
+                    // Zones: 
+                    // 1-3 (Index 0-2): Fast (480ms)
+                    // 4 (Index 3): Original (550ms)
+                    // 5-6 (Index 4-5): Slowed a little (600ms)
+                    let baseSpeed = 550;
+                    if (i < 3) baseSpeed = 480;
+                    if (i >= 4) baseSpeed = 600;
+
                     const speed = baseSpeed - (i * 60); 
                     
                     return anime({
