@@ -24,32 +24,37 @@
         .crack-container { 
             position: relative; background-color: #202020; border: 3px solid red; 
             height: 400px; display: grid; grid-template-columns: repeat(6, 1fr); 
-            overflow: hidden;
+            overflow: hidden; box-shadow: 0 0 20px rgba(255, 0, 0, 0.2);
         }
 
         .target-bar { 
             position: absolute; width: 100%; height: 35px; 
-            background: rgba(255, 0, 0, 0.8); top: 182px; z-index: 5; 
+            background: rgba(255, 0, 0, 0.8); top: 182px; z-index: 5;
+            box-shadow: 0 0 10px red;
         }
 
         .slider-column { display: flex; flex-direction: column; align-items: center; height: 100%; }
-        .part { background-color: white; width: 45px; height: 100px; }
+        .part { background-color: white; width: 45px; height: 100px; opacity: 0.8; }
         .spacer { height: 50px; } 
 
         .active .part { 
+            background-color: #fff;
             border: 4px solid yellow; box-shadow: 0 0 15px yellow; 
             width: 37px; height: 92px;
+            opacity: 1;
         }
 
-        .locked .part { background-color: white; }
+        .locked .part { background-color: #00ff00; border: 2px solid white; box-shadow: 0 0 10px #00ff00; }
 
         .win-message { 
             position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); 
             color: #00ff00; font-size: 2.5rem; z-index: 10; text-shadow: 0 0 20px #00ff00; 
+            background: rgba(0,0,0,0.8); padding: 20px; border: 2px solid #00ff00;
         }
 
-        .title { font-size: 3em; margin: 0; }
+        .title { font-size: 3em; margin: 0; letter-spacing: 2px; color: #fff; }
         .catch-phrase { color: yellow; margin-bottom: 20px; font-size: 1rem; letter-spacing: 1px; }
+        .instruction { margin-top: 20px; color: #666; font-size: 0.8rem; }
     </style>
 </head>
 <body>
@@ -69,8 +74,8 @@
             const initGame = () => {
                 animations.current.forEach(anim => anim.pause());
                 animations.current = bars.map((i) => {
-                    // Final bar (index 5) is now at 250ms for better balance
-                    const speed = 550 - (i * 60); 
+                    // SPEED TUNING: Base 450ms, decreasing by 70ms per bar for a faster challenge
+                    const speed = 450 - (i * 70); 
                     
                     return anime({
                         targets: `#col-${i}`,
@@ -100,8 +105,8 @@
                         const coreCenter = coreRect.top + (coreRect.height / 2);
                         const targetCenter = targetRect.top + (targetRect.height / 2);
 
-                        // Success gap (0.45 multiplier for larger hit area)
-                        const hitZone = targetRect.height * 0.45; 
+                        // Success gap (slightly tightened to 0.4 for faster speed)
+                        const hitZone = targetRect.height * 0.4; 
                         const isHit = Math.abs(coreCenter - targetCenter) < hitZone;
 
                         if (isHit) {
@@ -123,11 +128,12 @@
                                     setLockedBars([]);
                                     setActiveIndex(0);
                                     setWon(false);
-                                }, 2000);
+                                }, 3000);
                             } else { 
                                 setActiveIndex(activeIndex + 1); 
                             }
                         } else if (activeIndex > 0) {
+                            // Penalty: Move back one step
                             const prevIndex = activeIndex - 1;
                             setLockedBars(prev => prev.filter(item => item !== prevIndex));
                             animations.current[prevIndex].play();
@@ -141,11 +147,11 @@
 
             return (
                 <div className="content">
-                    <h1 className="title">Data Crack</h1>
-                    <p className="catch-phrase">MateoStrap Loves you!</p>
+                    <h1 className="title">DATA CRACK</h1>
+                    <p className="catch-phrase">MateoStrap Edition</p>
                     <div className="crack-container">
                         <div className="target-bar" />
-                        {won && <div className="win-message">WINNER WINNER</div>}
+                        {won && <div className="win-message">ACCESS GRANTED</div>}
                         {bars.map((i) => (
                             <div 
                                 key={`${won}-${i}`}
@@ -158,7 +164,7 @@
                             </div>
                         ))}
                     </div>
-                    <p style={{marginTop:'20px'}}>PRESS SPACE TO HACK</p>
+                    <p className="instruction">PRESS [SPACE] TO OVERRIDE SYSTEM</p>
                 </div>
             );
         };
