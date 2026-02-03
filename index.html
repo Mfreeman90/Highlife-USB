@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HighLife Data Crack - Snap Version</title>
+    <title>HighLife Data Crack - MateoStrap Edition</title>
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
@@ -41,7 +41,6 @@
             width: 37px; height: 92px;
         }
 
-        /* Removed the green color change as requested */
         .locked .part { background-color: white; }
 
         .win-message { 
@@ -50,7 +49,7 @@
         }
 
         .title { font-size: 3em; margin: 0; }
-        .catch-phrase { color: yellow; margin-bottom: 20px; font-size: 0.8rem; }
+        .catch-phrase { color: yellow; margin-bottom: 20px; font-size: 1rem; letter-spacing: 1px; }
     </style>
 </head>
 <body>
@@ -69,15 +68,20 @@
 
             const initGame = () => {
                 animations.current.forEach(anim => anim.pause());
-                animations.current = bars.map((i) => anime({
-                    targets: `#col-${i}`,
-                    translateY: [0, 150],
-                    duration: 550 - (i * 70), 
-                    direction: 'alternate',
-                    loop: true,
-                    easing: 'easeInOutSine',
-                    autoplay: true
-                }));
+                animations.current = bars.map((i) => {
+                    // Final bar (index 5) is now at 250ms for better balance
+                    const speed = 550 - (i * 60); 
+                    
+                    return anime({
+                        targets: `#col-${i}`,
+                        translateY: [0, 150],
+                        duration: speed, 
+                        direction: 'alternate',
+                        loop: true,
+                        easing: 'easeInOutSine',
+                        autoplay: true
+                    });
+                });
             };
 
             useEffect(() => {
@@ -96,19 +100,18 @@
                         const coreCenter = coreRect.top + (coreRect.height / 2);
                         const targetCenter = targetRect.top + (targetRect.height / 2);
 
-                        // Success gap is a "tab bigger" - increased from 0.30 to 0.45
+                        // Success gap (0.45 multiplier for larger hit area)
                         const hitZone = targetRect.height * 0.45; 
                         const isHit = Math.abs(coreCenter - targetCenter) < hitZone;
 
                         if (isHit) {
-                            // STOP and SNAP to center
                             animations.current[activeIndex].pause();
                             
-                            // Visual Snap: Force the translateY to exactly 75px (the middle)
+                            // Perfect Snap to center
                             anime({
                                 targets: `#col-${activeIndex}`,
                                 translateY: 75,
-                                duration: 50,
+                                duration: 40,
                                 easing: 'easeOutQuad'
                             });
 
@@ -139,7 +142,7 @@
             return (
                 <div className="content">
                     <h1 className="title">Data Crack</h1>
-                    <p className="catch-phrase">Selling your secrets since 1996</p>
+                    <p className="catch-phrase">MateoStrap Loves you!</p>
                     <div className="crack-container">
                         <div className="target-bar" />
                         {won && <div className="win-message">WINNER WINNER</div>}
