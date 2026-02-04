@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Data Crack - HighLife RP Edition</title>
+    <title>Data Crack - HighLife Precision</title>
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
@@ -20,7 +20,6 @@
             overflow: hidden; position: relative;
         }
 
-        /* Window Frame */
         .window-frame {
             border: 3px solid #5baade;
             background-color: #050505;
@@ -41,7 +40,6 @@
         .header-title { color: #f7931e; font-size: 3.5rem; font-weight: 900; margin: 0; letter-spacing: 5px; }
         .header-subtitle { color: #f7931e; font-size: 0.8rem; margin-top: -5px; letter-spacing: 2px; }
 
-        /* The Game Box */
         .game-viewport {
             position: relative;
             height: 500px;
@@ -52,19 +50,19 @@
             background-size: 35px 35px;
             margin: 30px auto;
             width: 750px;
-            border: 4px solid #ff0000; /* This is the red boundary */
-            overflow: hidden; /* This keeps bars from going outside */
+            border: 4px solid #ff0000;
+            overflow: hidden; 
         }
 
-        /* Thicker Red Target Line */
+        /* Thicker Red Line */
         .target-line { 
             position: absolute; 
             width: 100%; 
-            height: 18px; 
+            height: 24px; /* Thicker as requested */
             background: #ff0000; 
             top: 50%;
             transform: translateY(-50%);
-            z-index: 5; 
+            z-index: 5; /* Sit behind the bars so the bars "cross" it */
         }
 
         .bars-container {
@@ -72,7 +70,7 @@
             justify-content: center;
             align-items: center;
             height: 100%;
-            gap: 25px; /* Perfect spacing between bars */
+            gap: 20px; 
             padding: 0 20px;
         }
 
@@ -80,16 +78,16 @@
             display: flex; 
             flex-direction: column; 
             align-items: center; 
-            height: 1000px; /* Long enough to scroll through viewport */
+            height: 1200px; 
             position: relative; 
-            z-index: 6;
+            z-index: 10; /* Higher than red line */
         }
         
         /* Thicker White Bars */
-        .part { background-color: white; width: 45px; height: 180px; }
+        .part { background-color: white; width: 48px; height: 300px; }
         
-        /* The Gap - Sized for the 18px red line */
-        .spacer { height: 32px; background: transparent; } 
+        /* The Gap - Sized slightly larger than red line for perfect center fit */
+        .spacer { height: 32px; background: transparent; width: 100%; } 
 
         .active .part { 
             outline: 4px solid #fdf5a2; 
@@ -98,7 +96,7 @@
 
         .win-message { 
             position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); 
-            color: #00ff00; font-size: 3rem; z-index: 20; 
+            color: #00ff00; font-size: 3rem; z-index: 30; 
             text-shadow: 0 0 25px #00ff00; font-weight: 900;
             background: rgba(0,0,0,0.95); padding: 40px; border: 2px solid #00ff00;
             width: 80%; text-align: center;
@@ -122,10 +120,10 @@
             const initGame = () => {
                 animations.current.forEach(anim => anim && anim.pause());
                 animations.current = bars.map((i) => {
-                    const speed = 800 - (i * 50); 
+                    const speed = 850 - (i * 55); 
                     return anime({
                         targets: `#col-${i}`,
-                        translateY: [-250, 250], 
+                        translateY: [-350, 350], 
                         duration: speed, 
                         direction: 'alternate',
                         loop: true,
@@ -150,13 +148,14 @@
                     const spacerCenter = spacer.top + (spacer.height / 2);
                     const targetCenter = targetLine.top + (targetLine.height / 2);
                     
-                    // Hit logic
-                    const isHit = Math.abs(spacerCenter - targetCenter) < (spacer.height / 2);
+                    // Hit logic based on center overlap
+                    const isHit = Math.abs(spacerCenter - targetCenter) < 14;
 
                     if (isHit) {
                         animations.current[activeIndex].pause();
 
                         // SNAP TO ABSOLUTE CENTER
+                        // This forces the spacer (the gap) to sit exactly on top of the target line
                         anime({
                             targets: `#col-${activeIndex}`,
                             translateY: 0, 
