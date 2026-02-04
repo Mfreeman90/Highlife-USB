@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Data Crack - High Velocity</title>
+    <title>Data Crack - Robbery Edition</title>
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
@@ -98,6 +98,15 @@
             background: rgba(0,0,0,0.95); padding: 30px; border: 3px solid #00ff00;
             text-align: center; width: 85%;
         }
+
+        .start-overlay {
+            position: absolute; inset: 0; background: rgba(0,0,0,0.8);
+            display: flex; justify-content: center; align-items: center; z-index: 200;
+        }
+        .start-btn {
+            background: #f7931e; color: black; border: none; padding: 20px 40px;
+            font-family: 'Orbitron'; font-size: 1.5rem; cursor: pointer; font-weight: 900;
+        }
     </style>
 </head>
 <body>
@@ -109,20 +118,61 @@
         const App = () => {
             const [activeIndex, setActiveIndex] = useState(0);
             const [won, setWon] = useState(false);
+            const [started, setStarted] = useState(false);
             const bars = [0, 1, 2, 3, 4, 5, 6, 7]; 
             const refs = useRef(bars.map(() => React.createRef()));
             const animations = useRef([]);
+            const audioCtx = useRef(null);
+            const alarmOsc = useRef(null);
+
+            const playClick = () => {
+                if (!audioCtx.current) return;
+                const osc = audioCtx.current.createOscillator();
+                const gain = audioCtx.current.createGain();
+                osc.type = 'square';
+                osc.frequency.setValueAtTime(150, audioCtx.current.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(40, audioCtx.current.currentTime + 0.1);
+                gain.gain.setValueAtTime(0.1, audioCtx.current.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.current.currentTime + 0.1);
+                osc.connect(gain);
+                gain.connect(audioCtx.current.destination);
+                osc.start();
+                osc.stop(audioCtx.current.currentTime + 0.1);
+            };
+
+            const startAlarm = () => {
+                audioCtx.current = new (window.AudioContext || window.webkitAudioContext)();
+                const osc = audioCtx.current.createOscillator();
+                const gain = audioCtx.current.createGain();
+                
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(440, audioCtx.current.currentTime);
+                // GTA Alarm "Warble"
+                const lfo = audioCtx.current.createOscillator();
+                const lfoGain = audioCtx.current.createGain();
+                lfo.frequency.value = 2; // Speed of the warble
+                lfoGain.gain.value = 100;
+                lfo.connect(lfoGain);
+                lfoGain.connect(osc.frequency);
+                
+                gain.gain.value = 0.05; // Keep it background
+                osc.connect(gain);
+                gain.connect(audioCtx.current.destination);
+                
+                lfo.start();
+                osc.start();
+                alarmOsc.current = { osc, lfo };
+            };
 
             const initGame = () => {
                 animations.current.forEach(anim => anim && anim.pause());
                 animations.current = bars.map((i) => {
-                    // FASTER SPEEDS: Lower duration = higher speed.
-                    // Starts at 750ms and gets faster with each bar.
-                    const speed = 750 - (i * 80); 
+                    let speed = 750 - (i * 80);
+                    if (i >= 6) { speed += 180; } 
                     return anime({
                         targets: `#col-${i}`,
                         translateY: [-180, 180], 
-                        duration: Math.max(speed, 200), // Ensures it doesn't become literally impossible
+                        duration: Math.max(speed, 250),
                         direction: 'alternate',
                         loop: true,
                         easing: 'easeInOutSine',
@@ -132,25 +182,21 @@
             };
 
             useEffect(() => {
-                initGame();
+                if (started) initGame();
                 return () => animations.current.forEach(anim => anim && anim.pause());
-            }, [won]);
+            }, [won, started]);
 
             const handleInteraction = () => {
-                if (won) return;
-                
+                if (won || !started) return;
                 const targetRect = document.querySelector('.target-line').getBoundingClientRect();
                 const spacerRect = refs.current[activeIndex].current.getBoundingClientRect();
-                
                 const targetCenter = targetRect.top + (targetRect.height / 2);
                 const spacerCenter = spacerRect.top + (spacerRect.height / 2);
-                
-                // Detection logic: Tightened for faster speed
-                const isHit = Math.abs(spacerCenter - targetCenter) < 15;
+                const isHit = Math.abs(spacerCenter - targetCenter) < 18;
 
                 if (isHit) {
+                    playClick();
                     animations.current[activeIndex].pause();
-
                     anime({
                         targets: `#col-${activeIndex}`,
                         translateY: 0, 
@@ -160,10 +206,6 @@
 
                     if (activeIndex === bars.length - 1) {
                         setWon(true);
-                        setTimeout(() => {
-                            setWon(false);
-                            setActiveIndex(0);
-                        }, 4000);
                     } else { 
                         setActiveIndex(activeIndex + 1); 
                     }
@@ -177,10 +219,15 @@
             useEffect(() => {
                 window.addEventListener('mousedown', handleInteraction);
                 return () => window.removeEventListener('mousedown', handleInteraction);
-            }, [activeIndex, won]);
+            }, [activeIndex, won, started]);
 
             return (
                 <div className="window-frame">
+                    {!started && (
+                        <div className="start-overlay">
+                            <button className="start-btn" onClick={() => {setStarted(true); startAlarm();}}>START HACK</button>
+                        </div>
+                    )}
                     <div className="header">
                         <h1 className="header-title">DATA CRACK</h1>
                         <div className="header-subtitle">SELLING YOUR SECRETS SINCE 1996</div>
