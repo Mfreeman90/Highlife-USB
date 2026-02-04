@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Data Crack - Balanced Precision</title>
+    <title>Data Crack - Expanded View</title>
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
@@ -33,12 +33,13 @@
             display: none; flex-direction: column; justify-content: center; align-items: center;
         }
 
-        .window-frame { border: 3px solid #5baade; background-color: #050505; width: 900px; font-family: 'Orbitron', sans-serif; position: relative; z-index: 10; }
+        .window-frame { border: 3px solid #5baade; background-color: #050505; width: 950px; font-family: 'Orbitron', sans-serif; position: relative; z-index: 10; }
         .header { border-bottom: 2px solid #f7931e; padding: 12px; text-align: center; background: #000; }
         .header-title { color: #f7931e; font-size: 3rem; font-weight: 900; margin: 0; letter-spacing: 4px; }
         .sub-header { color: #fdf5a2; font-size: 0.8rem; margin-top: -5px; }
 
-        .game-viewport { position: relative; height: 550px; margin: 30px auto; width: 800px; border: 3px solid #ff0000; background-color: #000; overflow: hidden; }
+        /* RED SQUARE DIMENSIONS INCREASED: width 850px, height 600px */
+        .game-viewport { position: relative; height: 600px; margin: 30px auto; width: 850px; border: 3px solid #ff0000; background-color: #000; overflow: hidden; }
         
         .target-line { 
             position: absolute; width: 100%; height: 35px; background: #ff0000; 
@@ -46,7 +47,6 @@
             box-shadow: 0 0 15px rgba(255, 0, 0, 0.6); 
         }
 
-        /* SPACING MATCHED TO RECTANGLE WIDTH (38px) */
         .bars-container { display: flex; justify-content: center; align-items: center; height: 100%; gap: 38px; position: relative; z-index: 10; }
         .slider-column { display: flex; flex-direction: column; align-items: center; position: relative; }
         
@@ -132,7 +132,7 @@
                     let speed = 750 - (i * 90);
                     if (i === 5) speed = 350; if (i === 6) speed = 280; 
                     return anime({
-                        targets: `#col-${i}`, translateY: [-180, 180], duration: speed,
+                        targets: `#col-${i}`, translateY: [-210, 210], duration: speed,
                         direction: 'alternate', loop: true, easing: 'easeInOutSine', autoplay: true
                     });
                 });
