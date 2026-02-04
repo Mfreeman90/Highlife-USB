@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HighLife Data Crack - MateoStrap Edition</title>
+    <title>HighLife Data Crack - MateoStrap Edition (2x Large)</title>
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
@@ -19,48 +19,42 @@
             display: flex; justify-content: center; align-items: center; height: 100vh; 
         }
 
-        .content { text-align: center; width: 100%; max-width: 500px; }
+        .content { text-align: center; width: 100%; max-width: 1200px; }
         
         .crack-container { 
-            position: relative; 
-            background-color: #202020; 
-            border: 3px solid red; 
-            /* Scaled down height */
-            height: 300px; 
-            display: grid; 
-            grid-template-columns: repeat(6, 1fr); 
+            position: relative; background-color: #202020; border: 6px solid red; 
+            height: 800px; /* 2x Bigger */
+            display: grid; grid-template-columns: repeat(6, 1fr); 
             overflow: hidden;
         }
 
         .target-bar { 
-            position: absolute; 
-            width: 100%; 
-            height: 30px; 
+            position: absolute; width: 100%; 
+            height: 70px; /* 2x Bigger */
             background: rgba(255, 0, 0, 0.8); 
-            /* Centered for 300px height */
-            top: 135px; 
+            top: 365px; /* Centered for 800px height */
             z-index: 5; 
         }
 
         .slider-column { display: flex; flex-direction: column; align-items: center; height: 100%; }
         
-        .part { background-color: white; width: 35px; height: 80px; }
-        .spacer { height: 40px; } 
+        .part { background-color: white; width: 90px; height: 200px; } /* 2x Bigger */
+        .spacer { height: 100px; } /* 2x Bigger */
 
         .active .part { 
-            border: 3px solid yellow; box-shadow: 0 0 10px yellow; 
-            width: 29px; height: 74px;
+            border: 8px solid yellow; box-shadow: 0 0 30px yellow; 
+            width: 74px; height: 184px;
         }
 
         .locked .part { background-color: white; }
 
         .win-message { 
             position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); 
-            color: #00ff00; font-size: 2rem; z-index: 10; text-shadow: 0 0 20px #00ff00; 
+            color: #00ff00; font-size: 5rem; z-index: 10; text-shadow: 0 0 40px #00ff00; 
         }
 
-        .title { font-size: 2em; margin: 0; }
-        .catch-phrase { color: yellow; margin-bottom: 20px; font-size: 0.8rem; letter-spacing: 1px; }
+        .title { font-size: 6em; margin: 0; }
+        .catch-phrase { color: yellow; margin-bottom: 40px; font-size: 2rem; letter-spacing: 2px; }
     </style>
 </head>
 <body>
@@ -88,7 +82,7 @@
                     
                     return anime({
                         targets: `#col-${i}`,
-                        translateY: [0, 100], // Scaled translation
+                        translateY: [0, 300], // 2x Bigger range
                         duration: speed, 
                         direction: 'alternate',
                         loop: true,
@@ -120,7 +114,7 @@
                             
                             anime({
                                 targets: `#col-${activeIndex}`,
-                                translateY: 50, // Center position for locked bar
+                                translateY: 150, // Locked center position
                                 duration: 40,
                                 easing: 'easeOutQuad'
                             });
@@ -155,7 +149,7 @@
                     <p className="catch-phrase">MateoStrap Loves you!</p>
                     <div className="crack-container">
                         <div className="target-bar" />
-                        {won && <div className="win-message">SUCCESS</div>}
+                        {won && <div className="win-message">WINNER WINNER</div>}
                         {bars.map((i) => (
                             <div 
                                 key={`${won}-${i}`}
@@ -168,7 +162,7 @@
                             </div>
                         ))}
                     </div>
-                    <p style={{marginTop:'20px', fontSize: '0.7rem'}}>CLICK ANYWHERE TO HACK</p>
+                    <p style={{marginTop:'40px', fontSize: '1.5rem'}}>CLICK ANYWHERE TO HACK</p>
                 </div>
             );
         };
