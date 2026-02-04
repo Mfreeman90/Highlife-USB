@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Data Crack - Robbery Edition</title>
+    <title>Data Crack - Heist Edition</title>
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
@@ -36,7 +36,6 @@
         }
 
         .header-title { color: #f7931e; font-size: 3rem; font-weight: 900; margin: 0; letter-spacing: 4px; }
-        .header-subtitle { color: #f7931e; font-size: 0.8rem; margin-top: -5px; letter-spacing: 2px; opacity: 0.8; }
 
         .game-viewport {
             position: relative;
@@ -75,17 +74,8 @@
             position: relative;
         }
         
-        .part { 
-            background-color: white; 
-            width: 45px; 
-            height: 150px; 
-        }
-        
-        .spacer { 
-            height: 40px; 
-            background: transparent; 
-            width: 100%;
-        } 
+        .part { background-color: white; width: 45px; height: 150px; }
+        .spacer { height: 40px; background: transparent; width: 100%; } 
 
         .active .part { 
             outline: 4px solid #fdf5a2;
@@ -100,12 +90,13 @@
         }
 
         .start-overlay {
-            position: absolute; inset: 0; background: rgba(0,0,0,0.8);
+            position: absolute; inset: 0; background: rgba(0,0,0,0.9);
             display: flex; justify-content: center; align-items: center; z-index: 200;
         }
         .start-btn {
             background: #f7931e; color: black; border: none; padding: 20px 40px;
             font-family: 'Orbitron'; font-size: 1.5rem; cursor: pointer; font-weight: 900;
+            border-radius: 4px;
         }
     </style>
 </head>
@@ -123,45 +114,67 @@
             const refs = useRef(bars.map(() => React.createRef()));
             const animations = useRef([]);
             const audioCtx = useRef(null);
-            const alarmOsc = useRef(null);
 
-            const playClick = () => {
+            // SOUND: Mechanical Mouse Click
+            const playMouseClick = () => {
                 if (!audioCtx.current) return;
+                const now = audioCtx.current.currentTime;
+                
+                // High frequency "tick"
                 const osc = audioCtx.current.createOscillator();
                 const gain = audioCtx.current.createGain();
-                osc.type = 'square';
-                osc.frequency.setValueAtTime(150, audioCtx.current.currentTime);
-                osc.frequency.exponentialRampToValueAtTime(40, audioCtx.current.currentTime + 0.1);
-                gain.gain.setValueAtTime(0.1, audioCtx.current.currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.current.currentTime + 0.1);
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(1200, now);
+                osc.frequency.exponentialRampToValueAtTime(800, now + 0.05);
+                gain.gain.setValueAtTime(0.2, now);
+                gain.gain.linearRampToValueAtTime(0, now + 0.05);
+                
                 osc.connect(gain);
                 gain.connect(audioCtx.current.destination);
-                osc.start();
-                osc.stop(audioCtx.current.currentTime + 0.1);
+                osc.start(now);
+                osc.stop(now + 0.05);
+
+                // Noise burst for the "click" texture
+                const bufferSize = audioCtx.current.sampleRate * 0.02;
+                const buffer = audioCtx.current.createBuffer(1, bufferSize, audioCtx.current.sampleRate);
+                const data = buffer.getChannelData(0);
+                for (let i = 0; i < bufferSize; i++) data[i] = Math.random() * 2 - 1;
+                
+                const noise = audioCtx.current.createBufferSource();
+                const noiseGain = audioCtx.current.createGain();
+                noise.buffer = buffer;
+                noiseGain.gain.setValueAtTime(0.05, now);
+                noiseGain.gain.linearRampToValueAtTime(0, now + 0.02);
+                
+                noise.connect(noiseGain);
+                noiseGain.connect(audioCtx.current.destination);
+                noise.start(now);
             };
 
-            const startAlarm = () => {
+            // SOUND: Faint School Bell Ringing in background
+            const startFaintBell = () => {
                 audioCtx.current = new (window.AudioContext || window.webkitAudioContext)();
-                const osc = audioCtx.current.createOscillator();
-                const gain = audioCtx.current.createGain();
                 
-                osc.type = 'triangle';
-                osc.frequency.setValueAtTime(440, audioCtx.current.currentTime);
-                // GTA Alarm "Warble"
-                const lfo = audioCtx.current.createOscillator();
-                const lfoGain = audioCtx.current.createGain();
-                lfo.frequency.value = 2; // Speed of the warble
-                lfoGain.gain.value = 100;
-                lfo.connect(lfoGain);
-                lfoGain.connect(osc.frequency);
-                
-                gain.gain.value = 0.05; // Keep it background
-                osc.connect(gain);
-                gain.connect(audioCtx.current.destination);
-                
-                lfo.start();
-                osc.start();
-                alarmOsc.current = { osc, lfo };
+                const playBellPulse = () => {
+                    const now = audioCtx.current.currentTime;
+                    const osc = audioCtx.current.createOscillator();
+                    const gain = audioCtx.current.createGain();
+                    
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(2500, now); // High pitch ringing
+                    
+                    gain.gain.setValueAtTime(0, now);
+                    gain.gain.linearRampToValueAtTime(0.015, now + 0.02); // Very faint
+                    gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.8);
+                    
+                    osc.connect(gain);
+                    gain.connect(audioCtx.current.destination);
+                    osc.start(now);
+                    osc.stop(now + 1);
+                };
+
+                // Interval to simulate the ringing pattern
+                setInterval(playBellPulse, 150);
             };
 
             const initGame = () => {
@@ -195,7 +208,7 @@
                 const isHit = Math.abs(spacerCenter - targetCenter) < 18;
 
                 if (isHit) {
-                    playClick();
+                    playMouseClick();
                     animations.current[activeIndex].pause();
                     anime({
                         targets: `#col-${activeIndex}`,
@@ -225,12 +238,11 @@
                 <div className="window-frame">
                     {!started && (
                         <div className="start-overlay">
-                            <button className="start-btn" onClick={() => {setStarted(true); startAlarm();}}>START HACK</button>
+                            <button className="start-btn" onClick={() => {setStarted(true); startFaintBell();}}>START HACK</button>
                         </div>
                     )}
                     <div className="header">
                         <h1 className="header-title">DATA CRACK</h1>
-                        <div className="header-subtitle">SELLING YOUR SECRETS SINCE 1996</div>
                     </div>
                     <div className="game-viewport">
                         <div className="target-line" />
