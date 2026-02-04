@@ -107,8 +107,7 @@
         .target-line { 
             position: absolute; 
             width: 100%; 
-            /* CHANGED: Set to 50px, which is a "tab" smaller than the 60px gap */
-            height: 50px; 
+            height: 50px; /* Smaller than gap */
             background: rgba(255, 0, 0, 0.9); 
             top: 50%;
             transform: translateY(-50%);
@@ -118,7 +117,7 @@
 
         .slider-column { display: flex; flex-direction: column; align-items: center; height: 100%; position: relative; }
         
-        .part { background-color: white; width: 45px; height: 160px; }
+        .part { background-color: white; width: 45px; height: 160px; transition: box-shadow 0.2s; }
         
         /* Gap is 60px */
         .spacer { height: 60px; background: transparent; } 
@@ -126,6 +125,11 @@
         .active .part { 
             outline: 5px solid #fdf5a2; 
             box-shadow: 0 0 20px #fdf5a2;
+        }
+
+        /* Styling for locked bars to make them look "fixed" */
+        .locked .part {
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
         }
 
         .win-message { 
@@ -162,7 +166,7 @@
             const animations = useRef([]);
 
             const initGame = () => {
-                animations.current.forEach(anim => anim.pause());
+                animations.current.forEach(anim => anim && anim.pause());
                 animations.current = bars.map((i) => {
                     const speed = 700 - (i * 40); 
                     return anime({
@@ -179,7 +183,7 @@
 
             useEffect(() => {
                 initGame();
-                return () => animations.current.forEach(anim => anim.pause());
+                return () => animations.current.forEach(anim => anim && anim.pause());
             }, [won]);
 
             useEffect(() => {
@@ -189,15 +193,24 @@
                     const targetLine = document.querySelector('.target-line').getBoundingClientRect();
                     const spacer = refs.current[activeIndex].current.getBoundingClientRect();
                     
-                    // Center-to-center hit detection
                     const spacerCenter = spacer.top + spacer.height/2;
                     const targetCenter = targetLine.top + targetLine.height/2;
                     
-                    // Allowed tolerance is very tight now
-                    const isHit = Math.abs(spacerCenter - targetCenter) < (spacer.height / 3);
+                    // Hit logic
+                    const isHit = Math.abs(spacerCenter - targetCenter) < (spacer.height / 2.5);
 
                     if (isHit) {
+                        // 1. Pause moving animation
                         animations.current[activeIndex].pause();
+
+                        // 2. SNAP to middle (0 is the center of the translateY range [-220, 220])
+                        anime({
+                            targets: `#col-${activeIndex}`,
+                            translateY: 0,
+                            duration: 100,
+                            easing: 'easeOutQuad'
+                        });
+
                         setLockedBars(prev => [...prev, activeIndex]);
                         
                         if (activeIndex === bars.length - 1) {
@@ -211,8 +224,11 @@
                             setActiveIndex(activeIndex + 1); 
                         }
                     } else if (activeIndex > 0) {
+                        // Miss logic: restart the previous bar
                         const prevIndex = activeIndex - 1;
                         setLockedBars(prev => prev.filter(item => item !== prevIndex));
+                        
+                        // Restart previous animation
                         animations.current[prevIndex].play();
                         setActiveIndex(prevIndex);
                     }
@@ -237,7 +253,7 @@
                             <div 
                                 key={`${won}-${i}`}
                                 id={`col-${i}`} 
-                                className={`slider-column ${i === activeIndex ? 'active' : ''}`}
+                                className={`slider-column ${i === activeIndex ? 'active' : ''} ${lockedBars.includes(i) ? 'locked' : ''}`}
                             >
                                 <div className="part" />
                                 <div className="spacer" ref={refs.current[i]} />
