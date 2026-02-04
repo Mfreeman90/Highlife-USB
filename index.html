@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Data Crack - Heist Edition</title>
+    <title>Data Crack - HighLife Authentic Audio</title>
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
@@ -83,7 +83,7 @@
         }
 
         .win-message { 
-            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); 
+            position: absolute; top: 50%; left: 50%; transform: translate(-50% , -50%); 
             color: #00ff00; font-size: 3.5rem; z-index: 100; 
             background: rgba(0,0,0,0.95); padding: 30px; border: 3px solid #00ff00;
             text-align: center; width: 85%;
@@ -115,66 +115,63 @@
             const animations = useRef([]);
             const audioCtx = useRef(null);
 
-            // SOUND: Mechanical Mouse Click
-            const playMouseClick = () => {
+            // AUTHENTIC LOCK: Heavy Mechanical Clunk
+            const playLockSound = () => {
                 if (!audioCtx.current) return;
                 const now = audioCtx.current.currentTime;
                 
-                // High frequency "tick"
+                // Deep thud
                 const osc = audioCtx.current.createOscillator();
                 const gain = audioCtx.current.createGain();
-                osc.type = 'sine';
-                osc.frequency.setValueAtTime(1200, now);
-                osc.frequency.exponentialRampToValueAtTime(800, now + 0.05);
-                gain.gain.setValueAtTime(0.2, now);
-                gain.gain.linearRampToValueAtTime(0, now + 0.05);
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(80, now);
+                osc.frequency.exponentialRampToValueAtTime(30, now + 0.1);
+                gain.gain.setValueAtTime(0.4, now);
+                gain.gain.linearRampToValueAtTime(0, now + 0.15);
                 
                 osc.connect(gain);
                 gain.connect(audioCtx.current.destination);
                 osc.start(now);
-                osc.stop(now + 0.05);
+                osc.stop(now + 0.15);
 
-                // Noise burst for the "click" texture
-                const bufferSize = audioCtx.current.sampleRate * 0.02;
-                const buffer = audioCtx.current.createBuffer(1, bufferSize, audioCtx.current.sampleRate);
-                const data = buffer.getChannelData(0);
-                for (let i = 0; i < bufferSize; i++) data[i] = Math.random() * 2 - 1;
-                
-                const noise = audioCtx.current.createBufferSource();
-                const noiseGain = audioCtx.current.createGain();
-                noise.buffer = buffer;
-                noiseGain.gain.setValueAtTime(0.05, now);
-                noiseGain.gain.linearRampToValueAtTime(0, now + 0.02);
-                
-                noise.connect(noiseGain);
-                noiseGain.connect(audioCtx.current.destination);
-                noise.start(now);
+                // High metallic snap
+                const osc2 = audioCtx.current.createOscillator();
+                const gain2 = audioCtx.current.createGain();
+                osc2.type = 'square';
+                osc2.frequency.setValueAtTime(600, now);
+                gain2.gain.setValueAtTime(0.05, now);
+                gain2.gain.linearRampToValueAtTime(0, now + 0.05);
+                osc2.connect(gain2);
+                gain2.connect(audioCtx.current.destination);
+                osc2.start(now);
+                osc2.stop(now + 0.05);
             };
 
-            // SOUND: Faint School Bell Ringing in background
-            const startFaintBell = () => {
+            // AUTHENTIC BELL: Fast, metallic rhythmic pulses
+            const startHeistBell = () => {
                 audioCtx.current = new (window.AudioContext || window.webkitAudioContext)();
                 
-                const playBellPulse = () => {
+                const playPulse = () => {
                     const now = audioCtx.current.currentTime;
                     const osc = audioCtx.current.createOscillator();
                     const gain = audioCtx.current.createGain();
                     
+                    // High-pitched ringing (metallic)
                     osc.type = 'sine';
-                    osc.frequency.setValueAtTime(2500, now); // High pitch ringing
+                    osc.frequency.setValueAtTime(3200, now); 
                     
                     gain.gain.setValueAtTime(0, now);
-                    gain.gain.linearRampToValueAtTime(0.015, now + 0.02); // Very faint
-                    gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.8);
+                    gain.gain.linearRampToValueAtTime(0.01, now + 0.01); 
+                    gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.1);
                     
                     osc.connect(gain);
                     gain.connect(audioCtx.current.destination);
                     osc.start(now);
-                    osc.stop(now + 1);
+                    osc.stop(now + 0.15);
                 };
 
-                // Interval to simulate the ringing pattern
-                setInterval(playBellPulse, 150);
+                // Rapid repetition like the clip
+                setInterval(playPulse, 120); 
             };
 
             const initGame = () => {
@@ -208,7 +205,7 @@
                 const isHit = Math.abs(spacerCenter - targetCenter) < 18;
 
                 if (isHit) {
-                    playMouseClick();
+                    playLockSound();
                     animations.current[activeIndex].pause();
                     anime({
                         targets: `#col-${activeIndex}`,
@@ -238,7 +235,7 @@
                 <div className="window-frame">
                     {!started && (
                         <div className="start-overlay">
-                            <button className="start-btn" onClick={() => {setStarted(true); startFaintBell();}}>START HACK</button>
+                            <button className="start-btn" onClick={() => {setStarted(true); startHeistBell();}}>START HACK</button>
                         </div>
                     )}
                     <div className="header">
