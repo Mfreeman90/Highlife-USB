@@ -14,7 +14,7 @@
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@600;900&display=swap');
         
         body { 
-            margin: 0; background-color: #3e166b; /* Authentic RP Purple */
+            margin: 0; background-color: #3e166b;
             color: white; font-family: 'Arial', sans-serif; 
             display: flex; justify-content: center; align-items: center; height: 100vh; 
             overflow: hidden;
@@ -47,7 +47,7 @@
 
         .icon-label { font-size: 14px; text-shadow: 1px 1px 2px #000; }
 
-        /* The blue window frame */
+        /* Window frame */
         .window-frame {
             border: 4px solid #5baade;
             background-color: #050505;
@@ -78,10 +78,8 @@
             font-size: 1rem;
             margin-top: -5px;
             letter-spacing: 3px;
-            opacity: 0.9;
         }
 
-        /* The game area with the grid */
         .crack-container { 
             position: relative; 
             background-color: #000;
@@ -109,18 +107,20 @@
         .target-line { 
             position: absolute; 
             width: 100%; 
-            height: 12px; 
-            background: #ff0000; 
+            /* CHANGED: Set to 50px, which is a "tab" smaller than the 60px gap */
+            height: 50px; 
+            background: rgba(255, 0, 0, 0.9); 
             top: 50%;
             transform: translateY(-50%);
             z-index: 5; 
+            box-shadow: 0 0 15px rgba(255, 0, 0, 0.5);
         }
 
         .slider-column { display: flex; flex-direction: column; align-items: center; height: 100%; position: relative; }
         
         .part { background-color: white; width: 45px; height: 160px; }
         
-        /* CHANGED: Increased spacer height to make the "gaps" much bigger */
+        /* Gap is 60px */
         .spacer { height: 60px; background: transparent; } 
 
         .active .part { 
@@ -164,11 +164,10 @@
             const initGame = () => {
                 animations.current.forEach(anim => anim.pause());
                 animations.current = bars.map((i) => {
-                    const speed = 650 - (i * 35); 
+                    const speed = 700 - (i * 40); 
                     return anime({
                         targets: `#col-${i}`,
-                        /* Adjusted translateY for larger gaps */
-                        translateY: [-210, 210], 
+                        translateY: [-220, 220], 
                         duration: speed, 
                         direction: 'alternate',
                         loop: true,
@@ -190,9 +189,12 @@
                     const targetLine = document.querySelector('.target-line').getBoundingClientRect();
                     const spacer = refs.current[activeIndex].current.getBoundingClientRect();
                     
-                    // Hit detection logic based on spacer center
-                    const isHit = (spacer.top + spacer.height/2 > targetLine.top) && 
-                                  (spacer.top + spacer.height/2 < targetLine.bottom);
+                    // Center-to-center hit detection
+                    const spacerCenter = spacer.top + spacer.height/2;
+                    const targetCenter = targetLine.top + targetLine.height/2;
+                    
+                    // Allowed tolerance is very tight now
+                    const isHit = Math.abs(spacerCenter - targetCenter) < (spacer.height / 3);
 
                     if (isHit) {
                         animations.current[activeIndex].pause();
