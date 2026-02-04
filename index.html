@@ -20,75 +20,46 @@
             background-size: 40px 40px;
         }
 
+        /* Desktop Icons */
         .my-pc { position: absolute; top: 40px; left: 40px; display: flex; flex-direction: column; align-items: center; cursor: pointer; z-index: 5; }
         .pc-icon { width: 55px; height: 65px; background: linear-gradient(to bottom, #7db9e8 0%, #1e5799 100%); border: 2px solid #ffffff; border-radius: 4px; display: flex; justify-content: center; align-items: center; font-size: 1.8rem; }
         .pc-text { margin-top: 8px; font-weight: bold; text-shadow: 2px 2px 4px black; text-align: center; font-size: 0.9rem; }
+
+        /* RICK ROLL OVERLAY */
+        #rick-overlay {
+            position: fixed; inset: 0; background: black; z-index: 2000;
+            display: none; flex-direction: column; justify-content: center; align-items: center;
+        }
 
         .power-off { position: absolute; top: 40px; right: 40px; display: flex; flex-direction: column; align-items: center; cursor: pointer; z-index: 5; }
         .power-circle { width: 70px; height: 70px; background: #222; border: 4px solid #ff4444; border-radius: 50%; display: flex; justify-content: center; align-items: center; box-shadow: 0 0 20px rgba(255, 68, 68, 0.4); }
         .power-symbol { font-size: 2.5rem; color: #ff4444; font-weight: bold; }
 
+        /* Window Styling */
         .os-window { 
-            background: #c0c0c0;
-            border: 3px solid #ffffff;
-            border-right-color: #808080;
-            border-bottom-color: #808080;
-            box-shadow: 15px 15px 40px rgba(0,0,0,0.6);
-            width: 1150px;
-            position: relative;
-            z-index: 10;
+            background: #c0c0c0; border: 3px solid #ffffff; border-right-color: #808080; border-bottom-color: #808080;
+            box-shadow: 15px 15px 40px rgba(0,0,0,0.6); width: 1150px; position: relative; z-index: 10;
         }
-
-        .os-title-bar {
-            background: linear-gradient(90deg, #000080, #1084d0);
-            padding: 6px 10px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            color: white;
-            font-weight: bold;
-            font-size: 1rem;
-        }
-
+        .os-title-bar { background: linear-gradient(90deg, #000080, #1084d0); padding: 6px 10px; display: flex; justify-content: space-between; align-items: center; color: white; font-weight: bold; font-size: 1rem; }
         .os-controls { display: flex; gap: 4px; }
-        .os-btn {
-            width: 22px; height: 22px; background: #c0c0c0;
-            border: 1px solid #ffffff; border-right-color: #404040; border-bottom-color: #404040;
-            color: black; font-size: 12px; display: flex; align-items: center; justify-content: center;
-            cursor: pointer; font-family: sans-serif; font-weight: bold;
-        }
+        .os-btn { width: 22px; height: 22px; background: #c0c0c0; border: 1px solid #ffffff; border-right-color: #404040; border-bottom-color: #404040; color: black; font-size: 12px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-family: sans-serif; font-weight: bold; }
 
         .window-content { background-color: #050505; padding: 25px; }
         .header { border-bottom: 2px solid #f7931e; padding-bottom: 15px; text-align: center; margin-bottom: 25px;}
         .header-title { color: #f7931e; font-size: 3.5rem; font-family: 'Orbitron'; font-weight: 900; margin: 0; letter-spacing: 6px; }
         .sub-header { color: #fdf5a2; font-size: 1rem; font-family: 'Orbitron'; }
+        .mateo-note { color: #ff00ff; font-weight: bold; font-size: 1.2rem; margin-top: 10px; text-shadow: 0 0 5px #ff00ff; }
 
-        .game-viewport { 
-            position: relative; 
-            height: 725px; 
-            width: 1030px; 
-            margin: 0 auto;
-            border: 3px solid #ff0000; background-color: #000; overflow: hidden; 
-        }
-        
-        .target-line { 
-            position: absolute; width: 100%; height: 35px; background: #ff0000; 
-            top: 50%; transform: translateY(-50%); z-index: 1; 
-            box-shadow: 0 0 15px rgba(255, 0, 0, 0.6); 
-        }
-
+        /* Game Viewport */
+        .game-viewport { position: relative; height: 725px; width: 1030px; margin: 0 auto; border: 3px solid #ff0000; background-color: #000; overflow: hidden; }
+        .target-line { position: absolute; width: 100%; height: 35px; background: #ff0000; top: 50%; transform: translateY(-50%); z-index: 1; box-shadow: 0 0 15px rgba(255, 0, 0, 0.6); }
         .bars-container { display: flex; justify-content: center; align-items: center; height: 100%; gap: 46px; position: relative; z-index: 10; }
         
         .part { background-color: white; width: 46px; height: 130px; }
         .spacer { height: 40px; background: transparent; width: 100%; } 
         .active .part { outline: 4px solid #fdf5a2; box-shadow: 0 0 15px #fdf5a2; }
 
-        .win-message, .fail-message { 
-            position: absolute; top: 50%; left: 50%; transform: translate(-50% , -50%); 
-            z-index: 100; background: rgba(0,0,0,0.95); padding: 40px; text-align: center; 
-            width: 80%; display: flex; flex-direction: column; align-items: center; gap: 15px;
-            font-family: 'Orbitron';
-        }
+        .win-message, .fail-message { position: absolute; top: 50%; left: 50%; transform: translate(-50% , -50%); z-index: 100; background: rgba(0,0,0,0.95); padding: 40px; text-align: center; width: 80%; display: flex; flex-direction: column; align-items: center; gap: 15px; font-family: 'Orbitron'; }
         .win-message { color: #00ff00; border: 4px solid #00ff00; }
         .fail-message { color: #ff0000; border: 4px solid #ff0000; }
         
@@ -100,14 +71,33 @@
 </head>
 <body>
 
+    <div id="rick-overlay">
+        <h1 style="font-family: Orbitron; color: #ff4444; margin-bottom: 20px;">SYSTEM OVERLOAD</h1>
+        <div id="video-container"></div>
+        <button class="action-btn fail-btn" style="margin-top: 20px;" onclick="stopRickRoll()">REBOOT SYSTEM</button>
+    </div>
+
+    <script>
+        function startRickRoll() {
+            const container = document.getElementById('video-container');
+            // Auto-playing Rick Roll
+            container.innerHTML = '<iframe width="854" height="480" src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1&controls=0" frameborder="0" allow="autoplay; encrypted-media"></iframe>';
+            document.getElementById('rick-overlay').style.display = 'flex';
+        }
+        function stopRickRoll() {
+            document.getElementById('video-container').innerHTML = '';
+            document.getElementById('rick-overlay').style.display = 'none';
+        }
+    </script>
+
     <div class="my-pc" onclick="alert('Drive C:/ is locked.')">
         <div class="pc-icon">💽</div>
         <div class="pc-text">My Computer</div>
     </div>
 
-    <div class="power-off" onclick="location.reload()">
+    <div class="power-off" onclick="startRickRoll()">
         <div class="power-circle"><span class="power-symbol">⏻</span></div>
-        <div class="power-text" style="color:#ccc; font-size:0.8rem; font-weight:bold; margin-top:8px;">Reset</div>
+        <div class="power-text" style="color:#ccc; font-size:0.8rem; font-weight:bold; margin-top:8px;">Power</div>
     </div>
 
     <div id="root"></div>
@@ -131,7 +121,6 @@
             const playHitSound = () => {
                 if (!audioCtx.current) audioCtx.current = new (window.AudioContext || window.webkitAudioContext)();
                 if (audioCtx.current.state === 'suspended') audioCtx.current.resume();
-                
                 const osc = audioCtx.current.createOscillator();
                 const gain = audioCtx.current.createGain();
                 osc.type = 'square';
@@ -162,7 +151,6 @@
             const handleInteraction = () => {
                 if (won || failed) return;
                 if (activeIndex === 0 && !startTime) setStartTime(Date.now());
-
                 const targetRect = document.querySelector('.target-line').getBoundingClientRect();
                 const spacerRect = refs.current[activeIndex].current.getBoundingClientRect();
                 const isHit = Math.abs((spacerRect.top + spacerRect.height/2) - (targetRect.top + targetRect.height/2)) < 25;
@@ -220,6 +208,7 @@
                             <div className="header">
                                 <h1 className="header-title">DATA CRACK</h1>
                                 <div className="sub-header">BEST RECORD: {bestTime ? `${bestTime} SECONDS` : 'NOT SET'}</div>
+                                <div className="mateo-note">Mateo Strap loves you!</div>
                             </div>
                             <div className="game-viewport">
                                 <div className="target-line" />
