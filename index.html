@@ -197,7 +197,9 @@
                 if (activeIndex === 0 && !startTime) setStartTime(Date.now());
                 const targetRect = document.querySelector('.target-line').getBoundingClientRect();
                 const spacerRect = refs.current[activeIndex].current.getBoundingClientRect();
-                const isHit = Math.abs((spacerRect.top + spacerRect.height/2) - (targetRect.top + targetRect.height/2)) < 25;
+                
+                // Success area increased from 25 to 35
+                const isHit = Math.abs((spacerRect.top + spacerRect.height/2) - (targetRect.top + targetRect.height/2)) < 35;
 
                 if (isHit) {
                     playHitSound();
@@ -238,51 +240,4 @@
             }, [activeIndex, won, failed, startTime]);
 
             return (
-                <div style={{display:'flex', justifyContent:'center', alignItems:'center', width:'100vw', height:'100vh'}}>
-                    <div className="os-window">
-                        <div className="os-title-bar">
-                            <span>C:\WINDOWS\System32\datacrack.exe</span>
-                            <div className="os-controls">
-                                <div className="os-btn">_</div>
-                                <div className="os-btn">□</div>
-                                <div className="os-btn" onClick={() => alert('Access Denied')}>X</div>
-                            </div>
-                        </div>
-                        <div className="window-content">
-                            <div className="header">
-                                <h1 className="header-title">DATA CRACK</h1>
-                                <div className="sub-header">BEST RECORD: {bestTime ? `${bestTime} SECONDS` : 'NOT SET'}</div>
-                            </div>
-                            <div className="game-viewport">
-                                <div className="target-line" />
-                                <div className="bars-container">
-                                    {bars.map((i) => (
-                                        <div key={i} id={`col-${i}`} className={`slider-column ${i === activeIndex ? 'active' : ''}`}>
-                                            <div className="part" /><div className="spacer" ref={refs.current[i]} /><div className="part" />
-                                        </div>
-                                    ))}
-                                </div>
-                                {won && (
-                                    <div className="win-message">
-                                        <h2 style={{fontSize:'4rem', margin:0}}>DECRYPTED</h2>
-                                        <div className="final-time">TIME: {finalTime} SECONDS</div>
-                                        <button className="action-btn win-btn" onClick={resetGame}>RUN AGAIN</button>
-                                    </div>
-                                )}
-                                {failed && (
-                                    <div className="fail-message">
-                                        <h2 style={{fontSize:'4rem', margin:0}}>LOCKED OUT</h2>
-                                        <button className="action-btn fail-btn" onClick={resetGame}>RETRAIN</button>
-                                    </div>
-                                )}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            );
-        };
-
-        ReactDOM.createRoot(document.getElementById('root')).render(<App />);
-    </script>
-</body>
-</html>
+                <div style={{display:'flex',
