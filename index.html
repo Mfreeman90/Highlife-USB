@@ -45,6 +45,19 @@
         .note-lines { margin-top: 15px; width: 60%; height: 2px; background: #ccc; box-shadow: 0 6px 0 #ccc, 0 12px 0 #ccc; }
         .note-text { margin-top: 8px; font-weight: bold; font-size: 0.75rem; text-shadow: 2px 2px 4px black; text-align: center; color: white; line-height: 1.1; pointer-events: none; }
 
+        /* NEW MATEO LOVE WINDOW */
+        #love-popup {
+            display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            width: 320px; background: #c0c0c0; border: 3px solid #fff; border-right-color: #808080; 
+            border-bottom-color: #808080; z-index: 3000; padding: 2px; box-shadow: 10px 10px 20px rgba(0,0,0,0.5);
+        }
+        .love-content { background: white; padding: 30px; text-align: center; color: black; border: 1px solid #808080; }
+        .cash-btn { 
+            background: #28a745; color: white; border: 2px solid #1e7e34; padding: 10px 20px; 
+            font-weight: bold; cursor: pointer; text-decoration: none; display: inline-block; margin-top: 15px;
+            font-family: Arial, sans-serif;
+        }
+
         /* Rick Roll Overlay */
         #rick-overlay { position: fixed; inset: 0; background: black; z-index: 2000; display: none; flex-direction: column; justify-content: center; align-items: center; }
 
@@ -98,6 +111,17 @@
         <button class="action-btn fail-btn" style="margin-top: 20px;" onclick="stopRickRoll()">REBOOT SYSTEM</button>
     </div>
 
+    <div id="love-popup">
+        <div class="os-title-bar">
+            <span>Mateo.txt</span>
+            <div class="os-controls"><div class="os-btn" onclick="document.getElementById('love-popup').style.display='none'">X</div></div>
+        </div>
+        <div class="love-content">
+            <h2 style="margin:0 0 10px 0;">Mateo loves you!</h2>
+            <a href="https://cash.app/$MattFreeman8" target="_blank" class="cash-btn">Donate to $MattFreeman8</a>
+        </div>
+    </div>
+
     <script>
         function startRickRoll() {
             const container = document.getElementById('video-container');
@@ -107,6 +131,12 @@
         function stopRickRoll() {
             document.getElementById('video-container').innerHTML = '';
             document.getElementById('rick-overlay').style.display = 'none';
+        }
+
+        function openMateoNote() {
+            if(!isDragging) {
+                document.getElementById('love-popup').style.display = 'block';
+            }
         }
 
         let isDragging = false;
@@ -126,7 +156,9 @@
                 note.style.top = (e.clientY - offset.y) + 'px';
                 note.style.right = 'auto'; 
             });
-            document.addEventListener('mouseup', () => { isDragging = false; });
+            document.addEventListener('mouseup', () => { 
+                setTimeout(() => { isDragging = false; }, 50);
+            });
         }
         window.onload = initDrag;
     </script>
@@ -141,11 +173,11 @@
         <div class="power-text" style="color:#ccc; font-size:0.8rem; font-weight:bold; margin-top:8px;">Power</div>
     </div>
 
-    <div class="notepad-note" onclick="if(!isDragging) alert('Mateo Strap loves you!')">
+    <div class="notepad-note" onclick="openMateoNote()">
         <div class="note-icon">
             <div class="note-lines" style="margin-left: 10px;"></div>
         </div>
-        <div class="note-text">Mateo Strap loves you!</div>
+        <div class="note-text">CLICK ME</div>
     </div>
 
     <div id="root"></div>
@@ -209,14 +241,13 @@
             };
 
             const handleInteraction = (e) => {
-                if (e.target.closest('.my-pc') || e.target.closest('.power-off') || e.target.closest('.notepad-note') || e.target.closest('input')) return;
+                if (e.target.closest('.my-pc') || e.target.closest('.power-off') || e.target.closest('.notepad-note') || e.target.closest('#love-popup') || e.target.closest('input')) return;
                 
                 if (won || failed) return;
                 if (activeIndex === 0 && !startTime) setStartTime(Date.now());
                 const targetRect = document.querySelector('.target-line').getBoundingClientRect();
                 const spacerRect = refs.current[activeIndex].current.getBoundingClientRect();
                 
-                // HIT AREA: 35px
                 const isHit = Math.abs((spacerRect.top + spacerRect.height/2) - (targetRect.top + targetRect.height/2)) < 35;
 
                 if (isHit) {
@@ -254,7 +285,6 @@
 
             return (
                 <div className="os-container">
-                    {/* MAIN GAME WINDOW */}
                     <div className="os-window game-window">
                         <div className="os-title-bar">
                             <span>C:\WINDOWS\System32\datacrack.exe</span>
@@ -303,7 +333,6 @@
                         </div>
                     </div>
 
-                    {/* SIDEBAR LEADERBOARD WINDOW */}
                     <div className="os-window sidebar-window">
                         <div className="os-title-bar">
                             <span>RECORDS.LOG</span>
