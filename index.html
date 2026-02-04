@@ -76,15 +76,12 @@
     <script>
         function startRickRoll() {
             const container = document.getElementById('video-container');
-            // Inject the iframe to ensure it starts playing on click
             container.innerHTML = '<iframe width="800" height="450" src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1&controls=0&mute=0" frameborder="0" allow="autoplay; encrypted-media"></iframe>';
             document.getElementById('rick-overlay').style.display = 'flex';
         }
-
         function stopRickRoll() {
-            document.getElementById('video-container').innerHTML = ''; // Kill the video/audio
+            document.getElementById('video-container').innerHTML = '';
             document.getElementById('rick-overlay').style.display = 'none';
-            // Optional: Reload the whole app to reset the state
             location.reload();
         }
     </script>
@@ -117,16 +114,64 @@
             const bars = [0, 1, 2, 3, 4, 5, 6]; 
             const refs = useRef(bars.map(() => React.createRef()));
             const animations = useRef([]);
+            
+            // Audio System
+            const audioCtx = useRef(null);
+            const sirenInterval = useRef(null);
+
+            const playHitSound = () => {
+                if (!audioCtx.current) return;
+                const osc = audioCtx.current.createOscillator();
+                const gain = audioCtx.current.createGain();
+                osc.type = 'square';
+                osc.frequency.setValueAtTime(800, audioCtx.current.currentTime);
+                gain.gain.setValueAtTime(0.1, audioCtx.current.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.current.currentTime + 0.1);
+                osc.connect(gain);
+                gain.connect(audioCtx.current.destination);
+                osc.start();
+                osc.stop(audioCtx.current.currentTime + 0.1);
+            };
+
+            const startSiren = () => {
+                if (!audioCtx.current) return;
+                const osc = audioCtx.current.createOscillator();
+                const gain = audioCtx.current.createGain();
+                osc.type = 'triangle';
+                gain.gain.setValueAtTime(0.1, audioCtx.current.currentTime);
+                osc.connect(gain);
+                gain.connect(audioCtx.current.destination);
+                osc.start();
+                
+                let high = true;
+                sirenInterval.current = setInterval(() => {
+                    osc.frequency.exponentialRampToValueAtTime(high ? 600 : 400, audioCtx.current.currentTime + 0.4);
+                    high = !high;
+                }, 500);
+
+                // Attach to window to clear easily
+                window._activeSiren = { osc, gain };
+            };
+
+            const stopAllSounds = () => {
+                if (sirenInterval.current) clearInterval(sirenInterval.current);
+                if (window._activeSiren) {
+                    window._activeSiren.osc.stop();
+                    window._activeSiren = null;
+                }
+            };
 
             useEffect(() => {
                 const target = won ? '#success-text' : failed ? '#fail-text' : null;
                 if (target) {
+                    if (failed) startSiren();
                     anime.timeline().add({
                         targets: target, scale: [0.5, 1.2, 1], opacity: [0, 1], duration: 600, easing: 'easeOutBack'
                     }).add({
                         targets: target, scale: [1, 1.05, 1], duration: 1000, loop: true, easing: 'easeInOutSine'
                     });
                 }
+                return () => stopAllSounds();
             }, [won, failed]);
 
             const initGame = () => {
@@ -153,6 +198,7 @@
                 const isHit = Math.abs((spacerRect.top + spacerRect.height/2) - (targetRect.top + targetRect.height/2)) < 22;
 
                 if (isHit) {
+                    playHitSound();
                     animations.current[activeIndex].pause();
                     anime({ targets: `#col-${activeIndex}`, translateY: 0, duration: 40 });
                     if (activeIndex === 6) setWon(true);
@@ -169,8 +215,15 @@
             };
 
             const resetGame = (e) => {
-                e.stopPropagation(); setWon(false); setFailed(false); setStarted(false); setActiveIndex(0);
+                e.stopPropagation();
+                stopAllSounds();
+                setWon(false); setFailed(false); setStarted(false); setActiveIndex(0);
                 bars.forEach(i => anime({ targets: `#col-${i}`, translateY: 0, duration: 0 }));
+            };
+
+            const startHack = () => {
+                audioCtx.current = new (window.AudioContext || window.webkitAudioContext)();
+                setStarted(true);
             };
 
             useEffect(() => {
@@ -183,7 +236,7 @@
                     <div className="window-frame">
                         {!started && (
                             <div className="start-overlay">
-                                <button className="start-btn" onClick={() => setStarted(true)}>START HACK</button>
+                                <button className="start-btn" onClick={startHack}>START HACK</button>
                             </div>
                         )}
                         <div className="header">
