@@ -21,65 +21,48 @@
             user-select: none;
         }
 
-        /* Desktop Icons */
-        .my-pc { position: absolute; top: 40px; left: 40px; display: flex; flex-direction: column; align-items: center; cursor: pointer; z-index: 5; }
-        .pc-icon { width: 55px; height: 65px; background: linear-gradient(to bottom, #7db9e8 0%, #1e5799 100%); border: 2px solid #ffffff; border-radius: 4px; display: flex; justify-content: center; align-items: center; font-size: 1.8rem; }
-        .pc-text { margin-top: 8px; font-weight: bold; text-shadow: 2px 2px 4px black; text-align: center; font-size: 0.9rem; }
+        /* Icons */
+        .my-pc { position: absolute; top: 20px; left: 20px; display: flex; flex-direction: column; align-items: center; cursor: pointer; z-index: 5; }
+        .pc-icon { width: 50px; height: 55px; background: linear-gradient(to bottom, #7db9e8 0%, #1e5799 100%); border: 2px solid #ffffff; border-radius: 4px; display: flex; justify-content: center; align-items: center; font-size: 1.5rem; }
+        .pc-text { margin-top: 5px; font-weight: bold; text-shadow: 2px 2px 4px black; font-size: 0.8rem; }
 
-        .power-off { position: absolute; top: 40px; right: 40px; display: flex; flex-direction: column; align-items: center; cursor: pointer; z-index: 5; }
-        .power-circle { width: 70px; height: 70px; background: #222; border: 4px solid #ff4444; border-radius: 50%; display: flex; justify-content: center; align-items: center; box-shadow: 0 0 20px rgba(255, 68, 68, 0.4); }
-        .power-symbol { font-size: 2.5rem; color: #ff4444; font-weight: bold; }
+        .power-off { position: absolute; top: 20px; right: 20px; display: flex; flex-direction: column; align-items: center; cursor: pointer; z-index: 5; }
+        .power-circle { width: 50px; height: 50px; background: #222; border: 3px solid #ff4444; border-radius: 50%; display: flex; justify-content: center; align-items: center; box-shadow: 0 0 15px rgba(255, 68, 68, 0.4); }
+        .power-symbol { font-size: 1.8rem; color: #ff4444; font-weight: bold; }
 
-        /* DRAGGABLE NOTEPAD STYLE */
-        .notepad-note { 
-            position: absolute; top: 140px; right: 35px; 
-            display: flex; flex-direction: column; align-items: center; 
-            cursor: grab; z-index: 100; width: 100px;
-            transition: transform 0.1s ease;
-        }
-        .notepad-note:active { cursor: grabbing; }
-        .notepad-note:hover .note-icon { filter: brightness(1.1); }
+        /* Windows UI */
+        .os-window { background: #c0c0c0; border: 3px solid #ffffff; border-right-color: #808080; border-bottom-color: #808080; box-shadow: 10px 10px 30px rgba(0,0,0,0.5); position: relative; pointer-events: auto; }
+        .os-title-bar { background: linear-gradient(90deg, #000080, #1084d0); padding: 4px 8px; display: flex; justify-content: space-between; align-items: center; color: white; font-weight: bold; font-size: 0.9rem; }
+        .os-controls { display: flex; gap: 3px; }
+        .os-btn { width: 18px; height: 18px; background: #c0c0c0; border: 1px solid #ffffff; border-right-color: #404040; border-bottom-color: #404040; color: black; font-size: 10px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-weight: bold; }
 
-        .note-icon { width: 45px; height: 55px; background: #fdf5a2; border: 1px solid #999; border-top-right-radius: 12px; position: relative; box-shadow: 2px 2px 0px rgba(0,0,0,0.3); }
-        .note-icon::before { content: ""; position: absolute; top: 0; right: 0; width: 12px; height: 12px; background: #e0e0e0; border-bottom: 1px solid #999; border-left: 1px solid #999; }
-        .note-lines { margin-top: 15px; width: 60%; height: 2px; background: #ccc; box-shadow: 0 6px 0 #ccc, 0 12px 0 #ccc; }
-        .note-text { margin-top: 8px; font-weight: bold; font-size: 0.75rem; text-shadow: 2px 2px 4px black; text-align: center; color: white; line-height: 1.1; pointer-events: none; }
+        .window-content { background-color: #050505; padding: 15px; }
+        .header-title { color: #f7931e; font-size: 2.5rem; font-family: 'Orbitron'; font-weight: 900; margin: 0; text-align: center; letter-spacing: 4px; border-bottom: 2px solid #f7931e; padding-bottom: 10px; margin-bottom: 15px; }
 
-        /* Rick Roll Overlay */
-        #rick-overlay { position: fixed; inset: 0; background: black; z-index: 2000; display: none; flex-direction: column; justify-content: center; align-items: center; }
-
-        /* Window Styling */
-        .os-window { background: #c0c0c0; border: 3px solid #ffffff; border-right-color: #808080; border-bottom-color: #808080; box-shadow: 15px 15px 40px rgba(0,0,0,0.6); width: 1150px; position: relative; z-index: 10; pointer-events: auto; }
-        .os-title-bar { background: linear-gradient(90deg, #000080, #1084d0); padding: 6px 10px; display: flex; justify-content: space-between; align-items: center; color: white; font-weight: bold; font-size: 1rem; }
-        .os-controls { display: flex; gap: 4px; }
-        .os-btn { width: 22px; height: 22px; background: #c0c0c0; border: 1px solid #ffffff; border-right-color: #404040; border-bottom-color: #404040; color: black; font-size: 12px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-family: sans-serif; font-weight: bold; }
-
-        .window-content { background-color: #050505; padding: 25px; }
-        .header { border-bottom: 2px solid #f7931e; padding-bottom: 15px; text-align: center; margin-bottom: 25px; display: flex; flex-direction: column; align-items: center;}
-        .header-title { color: #f7931e; font-size: 3.5rem; font-family: 'Orbitron'; font-weight: 900; margin: 0; letter-spacing: 6px; }
-        .sub-header { color: #fdf5a2; font-size: 1rem; font-family: 'Orbitron'; margin-top: 5px; }
-
-        /* Leaderboard UI */
-        .leaderboard-container { margin-top: 10px; display: flex; gap: 20px; font-family: 'Orbitron'; font-size: 0.8rem; color: #00ff00; }
-        .leaderboard-item { border-left: 1px solid #00ff00; padding-left: 8px; }
+        /* Layout */
+        .main-layout { display: flex; gap: 20px; justify-content: center; align-items: flex-start; padding: 50px; }
 
         /* Game Viewport */
-        .game-viewport { position: relative; height: 725px; width: 1030px; margin: 0 auto; border: 3px solid #ff0000; background-color: #000; overflow: hidden; }
+        .game-viewport { position: relative; height: 600px; width: 850px; background-color: #000; overflow: hidden; border: 2px solid #ff0000; }
         .target-line { position: absolute; width: 100%; height: 35px; background: #ff0000; top: 50%; transform: translateY(-50%); z-index: 1; box-shadow: 0 0 15px rgba(255, 0, 0, 0.6); }
-        .bars-container { display: flex; justify-content: center; align-items: center; height: 100%; gap: 46px; position: relative; z-index: 10; }
-        
-        .part { background-color: white; width: 46px; height: 130px; }
-        .spacer { height: 40px; background: transparent; width: 100%; } 
-        .active .part { outline: 4px solid #fdf5a2; box-shadow: 0 0 15px #fdf5a2; }
+        .bars-container { display: flex; justify-content: center; align-items: center; height: 100%; gap: 35px; position: relative; z-index: 10; }
+        .part { background-color: white; width: 38px; height: 110px; }
+        .spacer { height: 40px; width: 100%; } 
+        .active .part { outline: 3px solid #fdf5a2; box-shadow: 0 0 15px #fdf5a2; }
 
-        .win-message, .fail-message { position: absolute; top: 50%; left: 50%; transform: translate(-50% , -50%); z-index: 100; background: rgba(0,0,0,0.95); padding: 40px; text-align: center; width: 80%; display: flex; flex-direction: column; align-items: center; gap: 15px; font-family: 'Orbitron'; }
-        .win-message { color: #00ff00; border: 4px solid #00ff00; }
-        .fail-message { color: #ff0000; border: 4px solid #ff0000; }
+        /* Sidebar Leaderboard */
+        .sidebar-window { width: 280px; height: 658px; }
+        .lb-list { color: #00ff00; font-family: 'Orbitron'; list-style: none; padding: 0; margin: 0; }
+        .lb-entry { display: flex; justify-content: space-between; padding: 10px; border-bottom: 1px solid #333; font-size: 0.9rem; }
+        .lb-rank { color: #f7931e; width: 30px; }
+        .lb-name { flex-grow: 1; text-align: left; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; padding-right: 5px; }
+
+        /* Win/Fail Modals */
+        .modal { position: absolute; top: 50%; left: 50%; transform: translate(-50% , -50%); z-index: 100; background: rgba(0,0,0,0.95); padding: 30px; text-align: center; width: 80%; font-family: 'Orbitron'; border: 4px solid #00ff00; }
+        .name-input { background: #111; border: 2px solid #00ff00; color: #00ff00; padding: 10px; font-family: 'Orbitron'; text-align: center; font-size: 1.2rem; margin: 15px 0; width: 250px; outline: none; }
+        .action-btn { color: black; border: none; padding: 10px 30px; font-family: 'Orbitron'; font-size: 1.5rem; cursor: pointer; font-weight: 900; }
         
-        .final-time { font-size: 1.5rem; color: #fff; margin-bottom: 10px; }
-        .action-btn { color: black; border: none; padding: 12px 40px; font-family: 'Orbitron'; font-size: 1.8rem; cursor: pointer; font-weight: 900; border-radius: 4px; }
-        .win-btn { background: #00ff00; }
-        .fail-btn { background: #ff0000; }
+        #rick-overlay { position: fixed; inset: 0; background: black; z-index: 2000; display: none; flex-direction: column; justify-content: center; align-items: center; }
     </style>
 </head>
 <body>
@@ -87,57 +70,16 @@
     <div id="rick-overlay">
         <h1 style="font-family: Orbitron; color: #ff4444; margin-bottom: 20px;">SYSTEM OVERLOAD</h1>
         <div id="video-container"></div>
-        <button class="action-btn fail-btn" style="margin-top: 20px;" onclick="stopRickRoll()">REBOOT SYSTEM</button>
+        <button class="action-btn" style="background:#ff0000; margin-top:20px;" onclick="location.reload()">REBOOT</button>
     </div>
-
-    <script>
-        function startRickRoll() {
-            const container = document.getElementById('video-container');
-            container.innerHTML = '<iframe width="854" height="480" src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1&controls=0" frameborder="0" allow="autoplay; encrypted-media"></iframe>';
-            document.getElementById('rick-overlay').style.display = 'flex';
-        }
-        function stopRickRoll() {
-            document.getElementById('video-container').innerHTML = '';
-            document.getElementById('rick-overlay').style.display = 'none';
-        }
-
-        let isDragging = false;
-        let offset = { x: 0, y: 0 };
-
-        function initDrag() {
-            const note = document.querySelector('.notepad-note');
-            note.addEventListener('mousedown', (e) => {
-                isDragging = true;
-                offset.x = e.clientX - note.offsetLeft;
-                offset.y = e.clientY - note.offsetTop;
-            });
-            document.addEventListener('mousemove', (e) => {
-                if (!isDragging) return;
-                const note = document.querySelector('.notepad-note');
-                note.style.left = (e.clientX - offset.x) + 'px';
-                note.style.top = (e.clientY - offset.y) + 'px';
-                note.style.right = 'auto'; 
-            });
-            document.addEventListener('mouseup', () => { isDragging = false; });
-        }
-        window.onload = initDrag;
-    </script>
 
     <div class="my-pc" onclick="alert('Drive C:/ is locked.')">
         <div class="pc-icon">💽</div>
         <div class="pc-text">My Computer</div>
     </div>
 
-    <div class="power-off" onclick="startRickRoll()">
+    <div class="power-off" onclick="document.getElementById('rick-overlay').style.display='flex'; document.getElementById('video-container').innerHTML='<iframe width=854 height=480 src=https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1&controls=0 frameborder=0 allow=autoplay></iframe>'">
         <div class="power-circle"><span class="power-symbol">⏻</span></div>
-        <div class="power-text" style="color:#ccc; font-size:0.8rem; font-weight:bold; margin-top:8px;">Power</div>
-    </div>
-
-    <div class="notepad-note" onclick="if(!isDragging) alert('Mateo Strap loves you!')">
-        <div class="note-icon">
-            <div class="note-lines" style="margin-left: 10px;"></div>
-        </div>
-        <div class="note-text">Mateo Strap loves you!</div>
     </div>
 
     <div id="root"></div>
@@ -147,40 +89,23 @@
 
         const App = () => {
             const [activeIndex, setActiveIndex] = useState(0);
-            const [won, setWon] = useState(false);
-            const [failed, setFailed] = useState(false);
+            const [gameState, setGameState] = useState('playing'); // playing, won, failed
             const [startTime, setStartTime] = useState(null);
-            const [finalTime, setFinalTime] = useState(null);
-            const [leaderboard, setLeaderboard] = useState(JSON.parse(localStorage.getItem('dataCrackLB')) || []);
+            const [finalTime, setFinalTime] = useState(0);
+            const [username, setUsername] = useState('');
+            const [leaderboard, setLeaderboard] = useState(JSON.parse(localStorage.getItem('dataCrackLB_XL')) || []);
             
             const bars = [0, 1, 2, 3, 4, 5, 6]; 
             const refs = useRef(bars.map(() => React.createRef()));
             const animations = useRef([]);
-            const audioCtx = useRef(null);
-
-            const playHitSound = () => {
-                if (!audioCtx.current) audioCtx.current = new (window.AudioContext || window.webkitAudioContext)();
-                if (audioCtx.current.state === 'suspended') audioCtx.current.resume();
-                const osc = audioCtx.current.createOscillator();
-                const gain = audioCtx.current.createGain();
-                osc.type = 'square';
-                osc.frequency.setValueAtTime(800, audioCtx.current.currentTime);
-                gain.gain.setValueAtTime(0.1, audioCtx.current.currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.current.currentTime + 0.1);
-                osc.connect(gain);
-                gain.connect(audioCtx.current.destination);
-                osc.start();
-                osc.stop(audioCtx.current.currentTime + 0.1);
-            };
 
             const initGame = () => {
-                if (!audioCtx.current) audioCtx.current = new (window.AudioContext || window.webkitAudioContext)();
                 animations.current.forEach(anim => anim && anim.pause());
                 animations.current = bars.map((i) => {
                     let speed = 750 - (i * 90);
                     if (i === 5) speed = 350; if (i === 6) speed = 280; 
                     return anime({
-                        targets: `#col-${i}`, translateY: [-200, 200], duration: speed,
+                        targets: `#col-${i}`, translateY: [-180, 180], duration: speed,
                         direction: 'alternate', loop: true, easing: 'easeInOutSine', autoplay: true
                     });
                 });
@@ -188,18 +113,20 @@
 
             useEffect(() => { initGame(); }, []);
 
-            const updateLeaderboard = (newTime) => {
-                const updated = [...leaderboard, parseFloat(newTime)]
-                    .sort((a, b) => a - b)
-                    .slice(0, 5);
-                setLeaderboard(updated);
-                localStorage.setItem('dataCrackLB', JSON.stringify(updated));
+            const handleSaveScore = () => {
+                const name = username.trim() || 'ANON_HACKER';
+                const newLB = [...leaderboard, { name, time: parseFloat(finalTime) }]
+                    .sort((a, b) => a.time - b.time)
+                    .slice(0, 10);
+                setLeaderboard(newLB);
+                localStorage.setItem('dataCrackLB_XL', JSON.stringify(newLB));
+                resetGame();
             };
 
             const handleInteraction = (e) => {
-                if (e.target.closest('.my-pc') || e.target.closest('.power-off') || e.target.closest('.notepad-note')) return;
-                
-                if (won || failed) return;
+                if (e.target.closest('.os-btn') || e.target.closest('input')) return;
+                if (gameState !== 'playing') return;
+
                 if (activeIndex === 0 && !startTime) setStartTime(Date.now());
                 const targetRect = document.querySelector('.target-line').getBoundingClientRect();
                 const spacerRect = refs.current[activeIndex].current.getBoundingClientRect();
@@ -208,20 +135,17 @@
                 const isHit = Math.abs((spacerRect.top + spacerRect.height/2) - (targetRect.top + targetRect.height/2)) < 35;
 
                 if (isHit) {
-                    playHitSound();
                     animations.current[activeIndex].pause();
                     anime({ targets: `#col-${activeIndex}`, translateY: 0, duration: 40 });
                     if (activeIndex === 6) {
-                        const timeTaken = ((Date.now() - startTime) / 1000).toFixed(2);
-                        setFinalTime(timeTaken);
-                        updateLeaderboard(timeTaken);
-                        setWon(true);
+                        setFinalTime(((Date.now() - startTime) / 1000).toFixed(2));
+                        setGameState('won');
                     } else {
                         setActiveIndex(activeIndex + 1);
                     }
                 } else {
                     if (activeIndex === 0) {
-                        setFailed(true);
+                        setGameState('failed');
                         animations.current.forEach(a => a.pause());
                     } else {
                         animations.current[activeIndex - 1].play();
@@ -230,9 +154,8 @@
                 }
             };
 
-            const resetGame = (e) => {
-                e.stopPropagation();
-                setWon(false); setFailed(false); setActiveIndex(0); setStartTime(null); setFinalTime(null);
+            const resetGame = () => {
+                setGameState('playing'); setActiveIndex(0); setStartTime(null); setUsername('');
                 bars.forEach(i => anime({ targets: `#col-${i}`, translateY: 0, duration: 0 }));
                 setTimeout(initGame, 50);
             };
@@ -240,52 +163,76 @@
             useEffect(() => {
                 window.addEventListener('mousedown', handleInteraction);
                 return () => window.removeEventListener('mousedown', handleInteraction);
-            }, [activeIndex, won, failed, startTime, leaderboard]);
+            }, [activeIndex, gameState, startTime]);
 
             return (
-                <div style={{display:'flex', justifyContent:'center', alignItems:'center', width:'100vw', height:'100vh'}}>
+                <div className="main-layout">
+                    {/* Main Game Window */}
                     <div className="os-window">
                         <div className="os-title-bar">
                             <span>C:\WINDOWS\System32\datacrack.exe</span>
                             <div className="os-controls">
-                                <div className="os-btn">_</div>
-                                <div className="os-btn">□</div>
-                                <div className="os-btn" onClick={() => alert('Access Denied')}>X</div>
+                                <div className="os-btn">_</div><div className="os-btn">□</div><div className="os-btn">X</div>
                             </div>
                         </div>
                         <div className="window-content">
-                            <div className="header">
-                                <h1 className="header-title">DATA CRACK</h1>
-                                <div className="sub-header">SYSTEM ACCESS LOG: FASTEST UPLOADS</div>
-                                <div className="leaderboard-container">
-                                    {leaderboard.length > 0 ? leaderboard.map((t, idx) => (
-                                        <div key={idx} className="leaderboard-item">#{idx+1}: {t}s</div>
-                                    )) : <div>NO RECORDS FOUND</div>}
-                                </div>
-                            </div>
+                            <h1 className="header-title">DATA CRACK</h1>
                             <div className="game-viewport">
                                 <div className="target-line" />
                                 <div className="bars-container">
                                     {bars.map((i) => (
-                                        <div key={i} id={`col-${i}`} className={`slider-column ${i === activeIndex ? 'active' : ''}`}>
+                                        <div key={i} id={`col-${i}`} className={i === activeIndex ? 'active' : ''}>
                                             <div className="part" /><div className="spacer" ref={refs.current[i]} /><div className="part" />
                                         </div>
                                     ))}
                                 </div>
-                                {won && (
-                                    <div className="win-message">
-                                        <h2 style={{fontSize:'4rem', margin:0}}>DECRYPTED</h2>
-                                        <div className="final-time">TIME: {finalTime} SECONDS</div>
-                                        <div style={{color:'#fdf5a2', marginBottom:'15px'}}>RANK: {leaderboard.indexOf(parseFloat(finalTime)) + 1}</div>
-                                        <button className="action-btn win-btn" onClick={resetGame}>RUN AGAIN</button>
+                                
+                                {gameState === 'won' && (
+                                    <div className="modal">
+                                        <h2 style={{fontSize:'2.5rem', margin:0, color: '#00ff00'}}>SUCCESS</h2>
+                                        <div style={{fontSize: '1.2rem', margin: '10px 0'}}>DECRYPTED IN {finalTime}s</div>
+                                        <input 
+                                            className="name-input" 
+                                            placeholder="ENTER INITIALS" 
+                                            maxLength="12"
+                                            value={username}
+                                            onChange={(e) => setUsername(e.target.value.toUpperCase())}
+                                            autoFocus
+                                        />
+                                        <br/>
+                                        <button className="action-btn" style={{background:'#00ff00'}} onClick={handleSaveScore}>SUBMIT LOG</button>
                                     </div>
                                 )}
-                                {failed && (
-                                    <div className="fail-message">
-                                        <h2 style={{fontSize:'4rem', margin:0}}>LOCKED OUT</h2>
-                                        <button className="action-btn fail-btn" onClick={resetGame}>RETRAIN</button>
+
+                                {gameState === 'failed' && (
+                                    <div className="modal" style={{borderColor: '#ff0000'}}>
+                                        <h2 style={{fontSize:'2.5rem', margin:0, color: '#ff0000'}}>LOCKED OUT</h2>
+                                        <button className="action-btn" style={{background:'#ff0000', marginTop: '20px'}} onClick={resetGame}>RETRY</button>
                                     </div>
                                 )}
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Leaderboard Sidebar Window */}
+                    <div className="os-window sidebar-window">
+                        <div className="os-title-bar">
+                            <span>GLOBAL_RECORDS.LOG</span>
+                            <div className="os-controls">
+                                <div className="os-btn">X</div>
+                            </div>
+                        </div>
+                        <div className="window-content" style={{height: 'calc(100% - 30px)', overflowY: 'auto'}}>
+                            <div style={{color: '#fdf5a2', fontSize: '0.8rem', marginBottom: '10px', textAlign: 'center'}}>TOP HACKER PROFILES</div>
+                            <div className="lb-list">
+                                {leaderboard.map((entry, i) => (
+                                    <div key={i} className="lb-entry">
+                                        <span className="lb-rank">{i + 1}.</span>
+                                        <span className="lb-name">{entry.name}</span>
+                                        <span className="lb-time">{entry.time}s</span>
+                                    </div>
+                                ))}
+                                {leaderboard.length === 0 && <div style={{textAlign:'center', opacity: 0.5}}>NO DATA FOUND</div>}
                             </div>
                         </div>
                     </div>
