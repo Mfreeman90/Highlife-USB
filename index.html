@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Data Crack - HighLife Edition</title>
+    <title>Data Crack - Precision Alignment</title>
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
@@ -17,37 +17,19 @@
             margin: 0; background-color: #3e166b;
             color: white; font-family: 'Arial', sans-serif; 
             display: flex; justify-content: center; align-items: center; height: 100vh; 
-            overflow: hidden;
-            position: relative;
+            overflow: hidden; position: relative;
         }
 
         /* Desktop Icons */
-        .desktop-icon {
-            position: absolute;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-            width: 100px;
-        }
-
+        .desktop-icon { position: absolute; display: flex; flex-direction: column; align-items: center; width: 100px; }
         .my-computer { top: 30px; left: 30px; }
         .power-off { top: 30px; right: 30px; }
-
-        .icon-box {
-            width: 60px; height: 60px;
-            margin-bottom: 5px;
-            background-size: contain;
-            background-repeat: no-repeat;
-            background-position: center;
-        }
-
+        .icon-box { width: 60px; height: 60px; margin-bottom: 5px; background-size: contain; background-repeat: no-repeat; background-position: center; }
         .computer-img { background-image: url('https://img.icons8.com/fluency/96/computer.png'); }
         .power-img { background-image: url('https://img.icons8.com/fluency/96/shutdown.png'); }
-
         .icon-label { font-size: 14px; text-shadow: 1px 1px 2px #000; }
 
-        /* Window frame */
+        /* Window Frame */
         .window-frame {
             border: 4px solid #5baade;
             background-color: #050505;
@@ -64,21 +46,8 @@
             background: linear-gradient(180deg, #222 0%, #000 100%);
         }
 
-        .header-title {
-            color: #f7931e;
-            font-size: 4.5rem;
-            font-weight: 900;
-            margin: 0;
-            letter-spacing: 6px;
-            text-shadow: 3px 3px #000;
-        }
-
-        .header-subtitle {
-            color: #f7931e;
-            font-size: 1rem;
-            margin-top: -5px;
-            letter-spacing: 3px;
-        }
+        .header-title { color: #f7931e; font-size: 4.5rem; font-weight: 900; margin: 0; letter-spacing: 6px; text-shadow: 3px 3px #000; }
+        .header-subtitle { color: #f7931e; font-size: 1rem; margin-top: -5px; letter-spacing: 3px; }
 
         .crack-container { 
             position: relative; 
@@ -96,37 +65,27 @@
             border: 15px solid #000;
         }
 
-        .red-boundary {
-            position: absolute;
-            top: 20px; bottom: 20px; left: 20px; right: 20px;
-            border: 4px solid #ff0000;
-            pointer-events: none;
-            z-index: 1;
-        }
+        .red-boundary { position: absolute; top: 20px; bottom: 20px; left: 20px; right: 20px; border: 4px solid #ff0000; pointer-events: none; z-index: 1; }
 
         .target-line { 
             position: absolute; 
             width: 100%; 
-            height: 50px; 
+            height: 35px; /* Narrower target for better "fit" look */
             background: rgba(255, 0, 0, 0.9); 
             top: 50%;
             transform: translateY(-50%);
             z-index: 5; 
-            box-shadow: 0 0 15px rgba(255, 0, 0, 0.5);
+            box-shadow: 0 0 15px rgba(255, 0, 0, 0.8);
         }
 
         .slider-column { display: flex; flex-direction: column; align-items: center; height: 100%; position: relative; }
         
-        /* The White Bars */
-        .part { background-color: white; width: 45px; height: 160px; }
-        
-        /* The Gap (Space for the red bar) */
-        .spacer { height: 60px; background: transparent; } 
+        /* White Bars */
+        .part { background-color: white; width: 45px; height: 180px; }
+        /* The Gap - 70px ensures the 35px red bar has breathing room */
+        .spacer { height: 70px; background: transparent; } 
 
-        .active .part { 
-            outline: 5px solid #fdf5a2; 
-            box-shadow: 0 0 20px #fdf5a2;
-        }
+        .active .part { outline: 5px solid #fdf5a2; box-shadow: 0 0 20px #fdf5a2; }
 
         .win-message { 
             position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); 
@@ -138,15 +97,8 @@
     </style>
 </head>
 <body>
-    <div class="desktop-icon my-computer">
-        <div class="icon-box computer-img"></div>
-        <div class="icon-label">My Computer</div>
-    </div>
-    
-    <div class="desktop-icon power-off">
-        <div class="icon-box power-img"></div>
-        <div class="icon-label">Power Off</div>
-    </div>
+    <div class="desktop-icon my-computer"><div class="icon-box computer-img"></div><div class="icon-label">My Computer</div></div>
+    <div class="desktop-icon power-off"><div class="icon-box power-img"></div><div class="icon-label">Power Off</div></div>
 
     <div id="root"></div>
 
@@ -164,10 +116,10 @@
             const initGame = () => {
                 animations.current.forEach(anim => anim && anim.pause());
                 animations.current = bars.map((i) => {
-                    const speed = 700 - (i * 40); 
+                    const speed = 750 - (i * 45); 
                     return anime({
                         targets: `#col-${i}`,
-                        translateY: [-220, 220], 
+                        translateY: [-200, 200], 
                         duration: speed, 
                         direction: 'alternate',
                         loop: true,
@@ -192,19 +144,20 @@
                     const spacerCenter = spacer.top + (spacer.height / 2);
                     const targetCenter = targetLine.top + (targetLine.height / 2);
                     
-                    // Hit logic: checking if the center of the gap is inside the red bar
-                    const isHit = Math.abs(spacerCenter - targetCenter) < (targetLine.height / 2 + 5);
+                    // Logic: center of spacer must be within the target line's bounds
+                    const isHit = Math.abs(spacerCenter - targetCenter) < (targetLine.height / 2 + 10);
 
                     if (isHit) {
                         animations.current[activeIndex].pause();
 
-                        // SNAP LOGIC: We calculate the offset needed to center the spacer on the target
-                        // 0 is the CSS default center.
+                        // THE PERFECT SNAP:
+                        // We force the column to translateY(0) because both the spacer 
+                        // and the red bar are centered in their respective containers.
                         anime({
                             targets: `#col-${activeIndex}`,
                             translateY: 0, 
-                            duration: 50,
-                            easing: 'easeOutQuad'
+                            duration: 80,
+                            easing: 'easeOutBack' // Add a little "mechanical" snap feel
                         });
 
                         setLockedBars(prev => [...prev, activeIndex]);
