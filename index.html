@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Data Crack - HighLife RP True Replica</title>
+    <title>Data Crack - HighLife Precision</title>
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
@@ -37,7 +37,6 @@
 
         .header-title { color: #f7931e; font-size: 3rem; font-weight: 900; margin: 0; letter-spacing: 4px; }
 
-        /* The Box from your screenshot */
         .game-viewport {
             position: relative;
             height: 500px;
@@ -45,14 +44,14 @@
             width: 750px;
             border: 3px solid #ff0000;
             background-color: #000;
-            overflow: hidden; /* CRITICAL: Clips the long bars */
+            overflow: hidden; 
         }
 
-        /* THICK RED LINE - Acts as the target behind the bars */
+        /* The Static Red Line */
         .target-line { 
             position: absolute; 
             width: 100%; 
-            height: 25px; /* Thicker like your crop image */
+            height: 20px; 
             background: #ff0000; 
             top: 50%;
             transform: translateY(-50%);
@@ -64,9 +63,9 @@
             justify-content: center;
             align-items: center;
             height: 100%;
-            gap: 15px; /* Tighter spacing like the screen */
+            gap: 12px; 
             position: relative;
-            z-index: 10; /* Bars are ABOVE the red line */
+            z-index: 10;
         }
 
         .slider-column { 
@@ -76,30 +75,30 @@
             position: relative;
         }
         
-        /* THE WHITE BARS - Very long so they always cover the red line except at the gap */
+        /* WHITE BARS - Fixed length to match your picture */
         .part { 
             background-color: white; 
-            width: 42px; 
-            height: 500px; /* Tall enough to fill the whole viewport */
+            width: 40px; 
+            height: 140px; /* Measured height from the screenshots */
         }
         
-        /* THE GAP - Needs to be slightly larger than 25px red line for the 'tab' smaller look */
+        /* THE GAP - Exactly enough for the red line */
         .spacer { 
-            height: 35px; 
+            height: 25px; 
             background: transparent; 
             width: 100%;
         } 
 
-        /* Active highlight from screenshot */
+        /* Yellow highlight for the active bar */
         .active .part { 
             outline: 3px solid #fdf5a2;
-            box-shadow: inset 0 0 10px #fdf5a2;
+            box-shadow: 0 0 10px #fdf5a2;
         }
 
         .win-message { 
             position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); 
             color: #00ff00; font-size: 3rem; z-index: 100; 
-            background: rgba(0,0,0,0.9); padding: 20px; border: 2px solid #00ff00;
+            background: rgba(0,0,0,0.95); padding: 20px; border: 2px solid #00ff00;
             text-align: center; width: 80%;
         }
     </style>
@@ -113,18 +112,18 @@
         const App = () => {
             const [activeIndex, setActiveIndex] = useState(0);
             const [won, setWon] = useState(false);
-            const bars = [0, 1, 2, 3, 4, 5, 6]; 
+            const bars = [0, 1, 2, 3, 4, 5, 6, 7]; 
             const refs = useRef(bars.map(() => React.createRef()));
             const animations = useRef([]);
 
             const initGame = () => {
                 animations.current.forEach(anim => anim && anim.pause());
                 animations.current = bars.map((i) => {
-                    const speed = 1000 - (i * 70); 
+                    const speed = 900 - (i * 60); 
                     return anime({
                         targets: `#col-${i}`,
-                        // Moves the gap up and down across the red line
-                        translateY: [-220, 220], 
+                        // Range limited so they don't fly off screen too far
+                        translateY: [-160, 160], 
                         duration: speed, 
                         direction: 'alternate',
                         loop: true,
@@ -148,19 +147,18 @@
                 const targetCenter = targetRect.top + (targetRect.height / 2);
                 const spacerCenter = spacerRect.top + (spacerRect.height / 2);
                 
-                // Detection: Is the gap center close enough to the red line center?
-                const isHit = Math.abs(spacerCenter - targetCenter) < 15;
+                // Detection
+                const isHit = Math.abs(spacerCenter - targetCenter) < 12;
 
                 if (isHit) {
                     animations.current[activeIndex].pause();
 
-                    // SNAP: Force the column to 0 translateY
-                    // Because the spacer is in the middle of the column and the red line is in the middle of the box
+                    // PERFECT SNAP TO CENTER
                     anime({
                         targets: `#col-${activeIndex}`,
                         translateY: 0, 
-                        duration: 40,
-                        easing: 'linear'
+                        duration: 50,
+                        easing: 'easeOutQuad'
                     });
 
                     if (activeIndex === bars.length - 1) {
@@ -169,7 +167,6 @@
                         setActiveIndex(activeIndex + 1); 
                     }
                 } else if (activeIndex > 0) {
-                    // Back one step logic
                     const prev = activeIndex - 1;
                     animations.current[prev].play();
                     setActiveIndex(prev);
@@ -183,13 +180,9 @@
 
             return (
                 <div className="window-frame">
-                    <div className="header">
-                        <h1 className="header-title">DATA CRACK</h1>
-                    </div>
-                    
+                    <div className="header"><h1 className="header-title">DATA CRACK</h1></div>
                     <div className="game-viewport">
                         <div className="target-line" />
-                        
                         <div className="bars-container">
                             {bars.map((i) => (
                                 <div 
@@ -203,8 +196,7 @@
                                 </div>
                             ))}
                         </div>
-
-                        {won && <div className="win-message">DECRYPTION COMPLETE</div>}
+                        {won && <div className="win-message">ACCESS GRANTED</div>}
                     </div>
                 </div>
             );
