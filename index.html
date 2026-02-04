@@ -30,34 +30,44 @@
         .power-circle { width: 70px; height: 70px; background: #222; border: 4px solid #ff4444; border-radius: 50%; display: flex; justify-content: center; align-items: center; box-shadow: 0 0 20px rgba(255, 68, 68, 0.4); }
         .power-symbol { font-size: 2.5rem; color: #ff4444; font-weight: bold; }
 
-        /* DRAGGABLE NOTEPAD STYLE */
+        /* DRAGGABLE NOTEPAD ICON */
         .notepad-note { 
             position: absolute; top: 140px; right: 35px; 
             display: flex; flex-direction: column; align-items: center; 
-            cursor: grab; z-index: 5000; width: 100px; /* High Z-Index to stay on top */
-            transition: transform 0.1s ease;
+            cursor: grab; z-index: 5000; width: 100px;
         }
         .notepad-note:active { cursor: grabbing; }
-        .notepad-note:hover .note-icon { filter: brightness(1.1); }
 
         .note-icon { width: 45px; height: 55px; background: #fdf5a2; border: 1px solid #999; border-top-right-radius: 12px; position: relative; box-shadow: 2px 2px 0px rgba(0,0,0,0.3); }
         .note-icon::before { content: ""; position: absolute; top: 0; right: 0; width: 12px; height: 12px; background: #e0e0e0; border-bottom: 1px solid #999; border-left: 1px solid #999; }
         .note-lines { margin-top: 15px; width: 60%; height: 2px; background: #ccc; box-shadow: 0 6px 0 #ccc, 0 12px 0 #ccc; }
         .note-text { margin-top: 8px; font-weight: bold; font-size: 0.75rem; text-shadow: 2px 2px 4px black; text-align: center; color: white; line-height: 1.1; pointer-events: none; }
 
-        /* MATEO LOVE WINDOW */
+        /* YELLOW NOTEPAD PAPER POPUP */
         #love-popup {
             display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            width: 320px; background: #c0c0c0; border: 3px solid #fff; border-right-color: #808080; 
-            border-bottom-color: #808080; z-index: 6000; padding: 2px; box-shadow: 15px 15px 50px rgba(0,0,0,0.8);
+            width: 350px; z-index: 6000; box-shadow: 20px 20px 60px rgba(0,0,0,0.7);
         }
-        .love-content { background: white; padding: 30px; text-align: center; color: black; border: 1px solid #808080; }
-        .cash-btn { 
-            background: #28a745; color: white; border: 2px solid #1e7e34; padding: 12px 20px; 
-            font-weight: bold; cursor: pointer; text-decoration: none; display: inline-block; margin-top: 15px;
-            font-family: Arial, sans-serif; border-radius: 4px;
+        .paper {
+            background: #fdf5a2; background-image: linear-gradient(#e1d98d 1px, transparent 1px);
+            background-size: 100% 30px; padding: 40px 20px 20px 50px; position: relative;
+            border: 1px solid #d1d1d1; border-radius: 2px; color: #333; font-family: 'Comic Sans MS', cursive, sans-serif;
+            min-height: 200px; line-height: 30px;
         }
-        .cash-btn:hover { background: #218838; }
+        .paper::before {
+            content: ''; position: absolute; left: 40px; top: 0; height: 100%; width: 2px;
+            background: rgba(255,0,0,0.2);
+        }
+        .close-paper {
+            position: absolute; top: 5px; right: 10px; cursor: pointer; font-weight: bold;
+            color: #cc0000; font-family: sans-serif; font-size: 1.2rem;
+        }
+        .pay-btn { 
+            background: #0070ba; color: white; border: none; padding: 10px 15px; 
+            font-weight: bold; cursor: pointer; text-decoration: none; display: inline-block; 
+            margin-top: 20px; font-family: Arial, sans-serif; border-radius: 5px; line-height: normal;
+        }
+        .pay-btn:hover { background: #005ea6; }
 
         /* Rick Roll Overlay */
         #rick-overlay { position: fixed; inset: 0; background: black; z-index: 2000; display: none; flex-direction: column; justify-content: center; align-items: center; }
@@ -113,16 +123,22 @@
     </div>
 
     <div id="love-popup">
-        <div class="os-title-bar">
-            <span>Mateo.txt</span>
-            <div class="os-controls">
-                <div class="os-btn" onclick="document.getElementById('love-popup').style.display='none'">X</div>
-            </div>
+        <div class="paper">
+            <div class="close-paper" onclick="document.getElementById('love-popup').style.display='none'">X</div>
+            <div style="font-size: 1.3rem;">Mateo Strap loves you!</div>
+            <div style="font-size: 1.1rem; margin-top: 10px;">Buy me a coffee if you'd like</div>
+            <a href="https://paypal.me/Mfreeman90" target="_blank" class="pay-btn">Support on PayPal</a>
         </div>
-        <div class="love-content">
-            <h2 style="margin:0 0 10px 0; font-family: 'Segoe UI', sans-serif;">Mateo loves you!</h2>
-            <a href="https://cash.app/$MattFreeman8" target="_blank" class="cash-btn">Donate to $MattFreeman8</a>
-        </div>
+    </div>
+
+    <div class="my-pc" onclick="alert('Drive C:/ is locked.')">
+        <div class="pc-icon">💽</div>
+        <div class="pc-text">My Computer</div>
+    </div>
+
+    <div class="power-off" onclick="startRickRoll()">
+        <div class="power-circle"><span class="power-symbol">⏻</span></div>
+        <div class="power-text" style="color:#ccc; font-size:0.8rem; font-weight:bold; margin-top:8px;">Power</div>
     </div>
 
     <div class="notepad-note" id="notepad-icon">
@@ -143,30 +159,26 @@
             document.getElementById('rick-overlay').style.display = 'none';
         }
 
-        let isDragging = false;
-        let offset = { x: 0, y: 0 };
+        // IMPROVED DRAGGING & CLICKING LOGIC
         const noteIcon = document.getElementById('notepad-icon');
+        let isMoving = false;
+        let startX, startY, initialX, initialY;
 
-        // Logic to open the note
-        noteIcon.addEventListener('click', (e) => {
-            e.stopPropagation(); // Prevents game from clicking behind it
-            if(!isDragging) {
-                document.getElementById('love-popup').style.display = 'block';
-            }
-        });
-
-        // Dragging Logic
         noteIcon.addEventListener('mousedown', (e) => {
-            isDragging = false; // Reset on new click
-            const startX = e.clientX;
-            const startY = e.clientY;
+            isMoving = false;
+            startX = e.clientX;
+            startY = e.clientY;
+            initialX = noteIcon.offsetLeft;
+            initialY = noteIcon.offsetTop;
 
-            function onMouseMove(moveEvent) {
-                if (Math.abs(moveEvent.clientX - startX) > 5 || Math.abs(moveEvent.clientY - startY) > 5) {
-                    isDragging = true;
+            function onMouseMove(ev) {
+                const dx = ev.clientX - startX;
+                const dy = ev.clientY - startY;
+                if (Math.abs(dx) > 5 || Math.abs(dy) > 5) {
+                    isMoving = true;
                 }
-                noteIcon.style.left = (moveEvent.clientX - (startX - noteIcon.offsetLeft)) + 'px';
-                noteIcon.style.top = (moveEvent.clientY - (startY - noteIcon.offsetTop)) + 'px';
+                noteIcon.style.left = (initialX + dx) + 'px';
+                noteIcon.style.top = (initialY + dy) + 'px';
                 noteIcon.style.right = 'auto';
             }
 
@@ -179,17 +191,14 @@
             document.addEventListener('mouseup', onMouseUp);
         });
 
+        noteIcon.addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (!isMoving) {
+                document.getElementById('love-popup').style.display = 'block';
+            }
+        });
+
     </script>
-
-    <div class="my-pc" onclick="alert('Drive C:/ is locked.')">
-        <div class="pc-icon">💽</div>
-        <div class="pc-text">My Computer</div>
-    </div>
-
-    <div class="power-off" onclick="startRickRoll()">
-        <div class="power-circle"><span class="power-symbol">⏻</span></div>
-        <div class="power-text" style="color:#ccc; font-size:0.8rem; font-weight:bold; margin-top:8px;">Power</div>
-    </div>
 
     <div id="root"></div>
 
@@ -252,7 +261,6 @@
             };
 
             const handleInteraction = (e) => {
-                // DON'T trigger game logic if clicking UI elements
                 if (e.target.closest('.my-pc') || e.target.closest('.power-off') || e.target.closest('.notepad-note') || e.target.closest('#love-popup') || e.target.closest('input')) return;
                 
                 if (won || failed) return;
