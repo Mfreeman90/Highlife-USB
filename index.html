@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Data Crack - Security Alert</title>
+    <title>Data Crack - Balanced Precision</title>
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
@@ -41,21 +41,16 @@
         .game-viewport { position: relative; height: 550px; margin: 30px auto; width: 800px; border: 3px solid #ff0000; background-color: #000; overflow: hidden; }
         
         .target-line { 
-            position: absolute; 
-            width: 100%; 
-            height: 35px; 
-            background: #ff0000; 
-            top: 50%; 
-            transform: translateY(-50%); 
-            z-index: 1; 
+            position: absolute; width: 100%; height: 35px; background: #ff0000; 
+            top: 50%; transform: translateY(-50%); z-index: 1; 
             box-shadow: 0 0 15px rgba(255, 0, 0, 0.6); 
         }
 
-        .bars-container { display: flex; justify-content: center; align-items: center; height: 100%; gap: 35px; position: relative; z-index: 10; }
+        /* SPACING MATCHED TO RECTANGLE WIDTH (38px) */
+        .bars-container { display: flex; justify-content: center; align-items: center; height: 100%; gap: 38px; position: relative; z-index: 10; }
         .slider-column { display: flex; flex-direction: column; align-items: center; position: relative; }
         
-        /* WHITE BARS: UPDATED TO 30PX WIDTH */
-        .part { background-color: white; width: 30px; height: 110px; }
+        .part { background-color: white; width: 38px; height: 130px; }
         .spacer { height: 40px; background: transparent; width: 100%; } 
         .active .part { outline: 4px solid #fdf5a2; box-shadow: 0 0 15px #fdf5a2; }
 
@@ -91,7 +86,7 @@
 
     <div class="my-pc" onclick="alert('Drive C:/ is locked.')">
         <div class="pc-icon">💽</div>
-        <div class="pc-text">My<br>Computer</div>
+        <div class="pc-text">My Computer</div>
     </div>
 
     <div class="power-off" onclick="startRickRoll()">
