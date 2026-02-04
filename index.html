@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Data Crack - Full Desktop Environment</title>
+    <title>Data Crack - Animated Victory</title>
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
@@ -26,58 +26,33 @@
 
         /* Desktop UI */
         .my-pc {
-            position: absolute;
-            top: 40px;
-            left: 40px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            cursor: pointer;
-            z-index: 5;
+            position: absolute; top: 40px; left: 40px;
+            display: flex; flex-direction: column; align-items: center; cursor: pointer; z-index: 5;
         }
         .pc-icon {
-            width: 55px;
-            height: 65px;
-            background: linear-gradient(to bottom, #7db9e8 0%, #1e5799 100%);
-            border: 2px solid #ffffff;
-            border-radius: 4px;
-            box-shadow: 4px 4px 10px rgba(0,0,0,0.3);
-            display: flex; justify-content: center; align-items: center;
-            font-size: 1.8rem;
+            width: 55px; height: 65px; background: linear-gradient(to bottom, #7db9e8 0%, #1e5799 100%);
+            border: 2px solid #ffffff; border-radius: 4px; box-shadow: 4px 4px 10px rgba(0,0,0,0.3);
+            display: flex; justify-content: center; align-items: center; font-size: 1.8rem;
         }
         .pc-text { margin-top: 8px; font-weight: bold; text-shadow: 2px 2px 4px black; text-align: center; font-size: 0.9rem; }
 
         .power-off {
-            position: absolute;
-            top: 40px;
-            right: 40px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            cursor: pointer;
-            z-index: 5;
+            position: absolute; top: 40px; right: 40px;
+            display: flex; flex-direction: column; align-items: center; cursor: pointer; z-index: 5;
         }
         .power-circle {
-            width: 70px;
-            height: 70px;
-            background: #222;
-            border: 4px solid #ff4444;
-            border-radius: 50%;
-            display: flex; justify-content: center; align-items: center;
-            box-shadow: 0 0 20px rgba(255, 68, 68, 0.4);
-            transition: 0.2s;
+            width: 70px; height: 70px; background: #222; border: 4px solid #ff4444; border-radius: 50%;
+            display: flex; justify-content: center; align-items: center; box-shadow: 0 0 20px rgba(255, 68, 68, 0.4); transition: 0.2s;
         }
         .power-circle:hover { transform: scale(1.05); box-shadow: 0 0 30px rgba(255, 68, 68, 0.6); }
         .power-symbol { font-size: 2.5rem; color: #ff4444; font-weight: bold; }
         .power-text { margin-top: 8px; font-weight: bold; text-shadow: 2px 2px 4px black; color: #ccc; font-size: 0.8rem; }
 
-        /* Shutdown Overlay */
         #shutdown-screen {
             position: fixed; inset: 0; background: black; z-index: 1000;
             display: none; flex-direction: column; justify-content: center; align-items: center;
         }
 
-        /* Notepad Styling */
         .notepad {
             position: absolute; top: 120px; right: 50px; width: 250px;
             background: #f0f0f0; border: 2px solid #888;
@@ -87,14 +62,10 @@
         .notepad-header { background: #000080; color: white; padding: 3px 8px; font-size: 0.7rem; display: flex; justify-content: space-between; }
         .notepad-content { padding: 10px; font-weight: bold; font-size: 0.9rem; }
 
-        /* Main Game Window */
+        /* Game Window */
         .window-frame {
-            border: 3px solid #5baade;
-            background-color: #050505;
-            width: 900px;
-            font-family: 'Orbitron', sans-serif;
-            position: relative;
-            z-index: 10;
+            border: 3px solid #5baade; background-color: #050505; width: 900px;
+            font-family: 'Orbitron', sans-serif; position: relative; z-index: 10;
         }
         .header { border-bottom: 2px solid #f7931e; padding: 12px; text-align: center; background: #000; }
         .header-title { color: #f7931e; font-size: 3rem; font-weight: 900; margin: 0; letter-spacing: 4px; }
@@ -122,21 +93,25 @@
         .spacer { height: 40px; background: transparent; width: 100%; } 
         .active .part { outline: 4px solid #fdf5a2; box-shadow: 0 0 15px #fdf5a2; }
 
+        /* Animated Win Message */
         .win-message { 
             position: absolute; top: 50%; left: 50%; transform: translate(-50% , -50%); 
-            color: #00ff00; font-size: 3.5rem; z-index: 100; 
-            background: rgba(0,0,0,0.95); padding: 30px; border: 3px solid #00ff00;
-            text-align: center; width: 85%;
-            display: flex; flex-direction: column; align-items: center;
-            gap: 20px;
+            z-index: 100; background: rgba(0,0,0,0.95); padding: 40px; border: 3px solid #00ff00;
+            text-align: center; width: 85%; display: flex; flex-direction: column; align-items: center; gap: 25px;
+        }
+
+        .access-text {
+            color: #00ff00; font-size: 3.5rem; font-weight: 900;
+            text-shadow: 0 0 10px #00ff00;
+            display: inline-block;
         }
 
         .try-again-btn {
-            background: #00ff00; color: black; border: none; padding: 10px 30px;
+            background: #00ff00; color: black; border: none; padding: 12px 40px;
             font-family: 'Orbitron'; font-size: 1.5rem; cursor: pointer; font-weight: 900;
             border-radius: 4px; transition: 0.2s;
         }
-        .try-again-btn:hover { background: #00cc00; transform: scale(1.05); }
+        .try-again-btn:hover { background: #fff; transform: scale(1.1); }
 
         .start-overlay {
             position: absolute; inset: 0; background: rgba(0,0,0,0.95);
@@ -150,7 +125,7 @@
     </style>
 </head>
 <body>
-    <div class="my-pc" onclick="alert('System Storage: 99% Full')">
+    <div class="my-pc" onclick="alert('Drive C:/ is encrypted.')">
         <div class="pc-icon">💽</div>
         <div class="pc-text">My<br>Computer</div>
     </div>
@@ -167,9 +142,7 @@
             <span>MateoStrap Loves you - Notepad</span>
             <span>✖</span>
         </div>
-        <div class="notepad-content">
-            MateoStrap Loves you.
-        </div>
+        <div class="notepad-content">MateoStrap Loves you.</div>
     </div>
 
     <div id="shutdown-screen">
@@ -193,90 +166,92 @@
             useEffect(() => {
                 const btn = document.getElementById('powerBtn');
                 btn.onclick = () => {
-                    const screen = document.getElementById('shutdown-screen');
-                    screen.style.display = 'flex';
-                    setTimeout(() => window.location.reload(), 2000);
+                    document.getElementById('shutdown-screen').style.display = 'flex';
+                    setTimeout(() => window.location.reload(), 1500);
                 };
             }, []);
+
+            // Animation for the win text
+            useEffect(() => {
+                if (won) {
+                    anime({
+                        targets: '.access-text',
+                        scale: [0.5, 1.1, 1],
+                        opacity: [0, 1],
+                        duration: 800,
+                        easing: 'easeOutElastic(1, .6)'
+                    });
+                    anime({
+                        targets: '.access-text',
+                        filter: ['brightness(1)', 'brightness(2)', 'brightness(1)'],
+                        loop: true,
+                        duration: 1500,
+                        easing: 'linear'
+                    });
+                }
+            }, [won]);
 
             const playSuccessSound = () => {
                 if (!audioCtx.current) audioCtx.current = new (window.AudioContext || window.webkitAudioContext)();
                 const now = audioCtx.current.currentTime;
-                const clickOsc = audioCtx.current.createOscillator();
-                const clickGain = audioCtx.current.createGain();
-                clickOsc.type = 'square';
-                clickOsc.frequency.setValueAtTime(800, now);
-                clickGain.gain.setValueAtTime(0.1, now);
-                clickGain.gain.exponentialRampToValueAtTime(0.001, now + 0.04);
-                clickOsc.connect(clickGain);
-                clickGain.connect(audioCtx.current.destination);
-                clickOsc.start(now);
-                clickOsc.stop(now + 0.04);
+                const osc = audioCtx.current.createOscillator();
+                const g = audioCtx.current.createGain();
+                osc.type = 'square';
+                osc.frequency.setValueAtTime(activeIndex === 6 ? 1200 : 800, now);
+                g.gain.setValueAtTime(0.1, now);
+                g.gain.exponentialRampToValueAtTime(0.001, now + 0.1);
+                osc.connect(g);
+                g.connect(audioCtx.current.destination);
+                osc.start();
+                osc.stop(now + 0.1);
             };
 
             const initGame = () => {
-                animations.current.forEach(anim => anim && anim.pause());
+                animations.current.forEach(a => a && a.pause());
                 animations.current = bars.map((i) => {
                     let speed = 750 - (i * 90);
                     if (i === 5) speed = 350; 
                     if (i === 6) speed = 280; 
-                    
                     return anime({
                         targets: `#col-${i}`,
                         translateY: [-180, 180], 
                         duration: speed,
                         direction: 'alternate',
                         loop: true,
-                        easing: 'easeInOutSine',
-                        autoplay: true
+                        easing: 'easeInOutSine'
                     });
                 });
             };
 
             useEffect(() => {
                 if (started && !won) initGame();
-                return () => animations.current.forEach(anim => anim && anim.pause());
+                return () => animations.current.forEach(a => a && a.pause());
             }, [won, started]);
 
             const handleInteraction = () => {
                 if (won || !started) return;
                 const targetRect = document.querySelector('.target-line').getBoundingClientRect();
                 const spacerRect = refs.current[activeIndex].current.getBoundingClientRect();
-                const targetCenter = targetRect.top + (targetRect.height / 2);
-                const spacerCenter = spacerRect.top + (spacerRect.height / 2);
-                
-                const isHit = Math.abs(spacerCenter - targetCenter) < 22;
+                const isHit = Math.abs((spacerRect.top + spacerRect.height/2) - (targetRect.top + targetRect.height/2)) < 22;
 
                 if (isHit) {
                     playSuccessSound();
                     animations.current[activeIndex].pause();
-                    anime({ targets: `#col-${activeIndex}`, translateY: 0, duration: 40, easing: 'linear' });
-
-                    if (activeIndex === bars.length - 1) {
-                        setWon(true);
-                    } else { 
-                        setActiveIndex(activeIndex + 1); 
-                    }
+                    anime({ targets: `#col-${activeIndex}`, translateY: 0, duration: 40 });
+                    if (activeIndex === 6) setWon(true);
+                    else setActiveIndex(activeIndex + 1);
                 } else if (activeIndex > 0) {
-                    const prev = activeIndex - 1;
-                    animations.current[prev].play();
-                    setActiveIndex(prev);
+                    animations.current[activeIndex - 1].play();
+                    setActiveIndex(activeIndex - 1);
                 }
             };
 
             const resetGame = (e) => {
-                e.stopPropagation(); // Prevent trigger handleInteraction
+                e.stopPropagation();
                 setWon(false);
                 setStarted(false);
                 setActiveIndex(0);
-                // Force reset positions of columns
-                bars.forEach(i => {
-                    anime({
-                        targets: `#col-${i}`,
-                        translateY: 0,
-                        duration: 0
-                    });
-                });
+                bars.forEach(i => anime({ targets: `#col-${i}`, translateY: 0, duration: 0 }));
             };
 
             useEffect(() => {
@@ -294,7 +269,7 @@
                         )}
                         <div className="header">
                             <h1 className="header-title">DATA CRACK</h1>
-                            <div className="sub-header">SELLING YOUR SECRETS SINCE 1996</div>
+                            <div className="sub-header">EST. 1996 | ENCRYPTION BYPASSED</div>
                         </div>
                         <div className="game-viewport">
                             <div className="target-line" />
@@ -309,7 +284,7 @@
                             </div>
                             {won && (
                                 <div className="win-message">
-                                    <span>ACCESS GRANTED</span>
+                                    <span className="access-text">ACCESS GRANTED</span>
                                     <button className="try-again-btn" onClick={resetGame}>TRY AGAIN</button>
                                 </div>
                             )}
@@ -319,8 +294,7 @@
             );
         };
 
-        const root = ReactDOM.createRoot(document.getElementById('root'));
-        root.render(<App />);
+        ReactDOM.createRoot(document.getElementById('root')).render(<App />);
     </script>
 </body>
 </html>
