@@ -122,21 +122,26 @@
         .spacer { height: 40px; background: transparent; width: 100%; } 
         .active .part { outline: 4px solid #fdf5a2; box-shadow: 0 0 15px #fdf5a2; }
 
-        .win-message { 
+        .win-message, .fail-message { 
             position: absolute; top: 50%; left: 50%; transform: translate(-50% , -50%); 
-            color: #00ff00; font-size: 3.5rem; z-index: 100; 
-            background: rgba(0,0,0,0.95); padding: 30px; border: 3px solid #00ff00;
+            z-index: 100; background: rgba(0,0,0,0.95); padding: 30px; 
             text-align: center; width: 85%;
             display: flex; flex-direction: column; align-items: center;
             gap: 20px;
         }
 
-        .try-again-btn {
-            background: #00ff00; color: black; border: none; padding: 10px 30px;
+        .win-message { color: #00ff00; border: 3px solid #00ff00; font-size: 3.5rem; }
+        .fail-message { color: #ff0000; border: 3px solid #ff0000; font-size: 3.5rem; }
+
+        .action-btn {
+            color: black; border: none; padding: 10px 30px;
             font-family: 'Orbitron'; font-size: 1.5rem; cursor: pointer; font-weight: 900;
             border-radius: 4px; transition: 0.2s;
         }
-        .try-again-btn:hover { background: #00cc00; transform: scale(1.05); }
+        .win-btn { background: #00ff00; }
+        .win-btn:hover { background: #00cc00; transform: scale(1.05); }
+        .fail-btn { background: #ff0000; }
+        .fail-btn:hover { background: #cc0000; transform: scale(1.05); }
 
         .start-overlay {
             position: absolute; inset: 0; background: rgba(0,0,0,0.95);
@@ -184,6 +189,7 @@
         const App = () => {
             const [activeIndex, setActiveIndex] = useState(0);
             const [won, setWon] = useState(false);
+            const [failed, setFailed] = useState(false);
             const [started, setStarted] = useState(false);
             const bars = [0, 1, 2, 3, 4, 5, 6]; 
             const refs = useRef(bars.map(() => React.createRef()));
@@ -199,40 +205,41 @@
                 };
             }, []);
 
-            // New effect to animate the "ACCESS GRANTED" text when won
+            // Shared animation logic for Win/Fail messages
             useEffect(() => {
-                if (won) {
+                const target = won ? '#success-text' : failed ? '#fail-text' : null;
+                if (target) {
                     anime.timeline()
                     .add({
-                        targets: '#success-text',
+                        targets: target,
                         scale: [0.5, 1.2, 1],
                         opacity: [0, 1],
                         duration: 600,
                         easing: 'easeOutBack'
                     })
                     .add({
-                        targets: '#success-text',
+                        targets: target,
                         scale: [1, 1.05, 1],
                         duration: 1000,
                         loop: true,
                         easing: 'easeInOutSine'
                     });
                 }
-            }, [won]);
+            }, [won, failed]);
 
-            const playSuccessSound = () => {
+            const playSound = (freq) => {
                 if (!audioCtx.current) audioCtx.current = new (window.AudioContext || window.webkitAudioContext)();
                 const now = audioCtx.current.currentTime;
-                const clickOsc = audioCtx.current.createOscillator();
-                const clickGain = audioCtx.current.createGain();
-                clickOsc.type = 'square';
-                clickOsc.frequency.setValueAtTime(800, now);
-                clickGain.gain.setValueAtTime(0.1, now);
-                clickGain.gain.exponentialRampToValueAtTime(0.001, now + 0.04);
-                clickOsc.connect(clickGain);
-                clickGain.connect(audioCtx.current.destination);
-                clickOsc.start(now);
-                clickOsc.stop(now + 0.04);
+                const osc = audioCtx.current.createOscillator();
+                const gain = audioCtx.current.createGain();
+                osc.type = 'square';
+                osc.frequency.setValueAtTime(freq, now);
+                gain.gain.setValueAtTime(0.1, now);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + 0.1);
+                osc.connect(gain);
+                gain.connect(audioCtx.current.destination);
+                osc.start();
+                osc.stop(now + 0.1);
             };
 
             const initGame = () => {
@@ -255,12 +262,12 @@
             };
 
             useEffect(() => {
-                if (started && !won) initGame();
+                if (started && !won && !failed) initGame();
                 return () => animations.current.forEach(anim => anim && anim.pause());
-            }, [won, started]);
+            }, [won, failed, started]);
 
             const handleInteraction = () => {
-                if (won || !started) return;
+                if (won || failed || !started) return;
                 const targetRect = document.querySelector('.target-line').getBoundingClientRect();
                 const spacerRect = refs.current[activeIndex].current.getBoundingClientRect();
                 const targetCenter = targetRect.top + (targetRect.height / 2);
@@ -269,7 +276,7 @@
                 const isHit = Math.abs(spacerCenter - targetCenter) < 22;
 
                 if (isHit) {
-                    playSuccessSound();
+                    playSound(800);
                     animations.current[activeIndex].pause();
                     anime({ targets: `#col-${activeIndex}`, translateY: 0, duration: 40, easing: 'linear' });
 
@@ -278,16 +285,23 @@
                     } else { 
                         setActiveIndex(activeIndex + 1); 
                     }
-                } else if (activeIndex > 0) {
-                    const prev = activeIndex - 1;
-                    animations.current[prev].play();
-                    setActiveIndex(prev);
+                } else {
+                    if (activeIndex === 0) {
+                        playSound(150);
+                        setFailed(true);
+                        animations.current.forEach(a => a.pause());
+                    } else {
+                        const prev = activeIndex - 1;
+                        animations.current[prev].play();
+                        setActiveIndex(prev);
+                    }
                 }
             };
 
             const resetGame = (e) => {
                 e.stopPropagation(); 
                 setWon(false);
+                setFailed(false);
                 setStarted(false);
                 setActiveIndex(0);
                 bars.forEach(i => {
@@ -302,7 +316,7 @@
             useEffect(() => {
                 window.addEventListener('mousedown', handleInteraction);
                 return () => window.removeEventListener('mousedown', handleInteraction);
-            }, [activeIndex, won, started]);
+            }, [activeIndex, won, failed, started]);
 
             return (
                 <div style={{display:'flex', justifyContent:'center', alignItems:'center', width:'100vw', height:'100vh'}}>
@@ -330,7 +344,13 @@
                             {won && (
                                 <div className="win-message">
                                     <span id="success-text">ACCESS GRANTED</span>
-                                    <button className="try-again-btn" onClick={resetGame}>TRY AGAIN</button>
+                                    <button className="action-btn win-btn" onClick={resetGame}>TRY AGAIN</button>
+                                </div>
+                            )}
+                            {failed && (
+                                <div className="fail-message">
+                                    <span id="fail-text">CONNECTION LOST</span>
+                                    <button className="action-btn fail-btn" onClick={resetGame}>RETRY</button>
                                 </div>
                             )}
                         </div>
