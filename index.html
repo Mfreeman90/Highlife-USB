@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Data Crack - 7 Bar Edition</title>
+    <title>Data Crack - High Speed Finale</title>
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
@@ -23,7 +23,7 @@
         .window-frame {
             border: 3px solid #5baade;
             background-color: #050505;
-            width: 900px; /* Adjusted for 7 bars */
+            width: 900px;
             font-family: 'Orbitron', sans-serif;
             position: relative;
         }
@@ -62,7 +62,7 @@
             justify-content: center;
             align-items: center;
             height: 100%;
-            gap: 35px; /* Slightly wider gap for 7 bars */
+            gap: 35px; 
             position: relative;
             z-index: 10;
         }
@@ -110,7 +110,7 @@
             const [activeIndex, setActiveIndex] = useState(0);
             const [won, setWon] = useState(false);
             const [started, setStarted] = useState(false);
-            const bars = [0, 1, 2, 3, 4, 5, 6]; // EXACTLY 7 BARS
+            const bars = [0, 1, 2, 3, 4, 5, 6]; 
             const refs = useRef(bars.map(() => React.createRef()));
             const animations = useRef([]);
             const audioCtx = useRef(null);
@@ -119,7 +119,6 @@
                 if (!audioCtx.current) audioCtx.current = new (window.AudioContext || window.webkitAudioContext)();
                 const now = audioCtx.current.currentTime;
                 
-                // Sharp Click
                 const clickOsc = audioCtx.current.createOscillator();
                 const clickGain = audioCtx.current.createGain();
                 clickOsc.type = 'square';
@@ -132,7 +131,6 @@
                 clickOsc.start(now);
                 clickOsc.stop(now + 0.04);
 
-                // Mechanical Clunk
                 const thudOsc = audioCtx.current.createOscillator();
                 const thudGain = audioCtx.current.createGain();
                 thudOsc.type = 'triangle';
@@ -149,14 +147,16 @@
             const initGame = () => {
                 animations.current.forEach(anim => anim && anim.pause());
                 animations.current = bars.map((i) => {
-                    // Recalibrated speed for 7 bars
+                    // BASE SPEED: Starts fast and gets progressively harder
                     let speed = 750 - (i * 90);
-                    if (i >= 5) { speed += 200; } // Slow down last two bars (index 5 & 6)
+                    
+                    // FINALE: If it's the 6th or 7th bar (index 5 or 6), make them extra fast
+                    if (i >= 5) { speed -= 100; } 
                     
                     return anime({
                         targets: `#col-${i}`,
                         translateY: [-180, 180], 
-                        duration: Math.max(speed, 250),
+                        duration: Math.max(speed, 200), // High speed floor
                         direction: 'alternate',
                         loop: true,
                         easing: 'easeInOutSine',
@@ -176,7 +176,8 @@
                 const spacerRect = refs.current[activeIndex].current.getBoundingClientRect();
                 const targetCenter = targetRect.top + (targetRect.height / 2);
                 const spacerCenter = spacerRect.top + (spacerRect.height / 2);
-                const isHit = Math.abs(spacerCenter - targetCenter) < 18;
+                
+                const isHit = Math.abs(spacerCenter - targetCenter) < 22;
 
                 if (isHit) {
                     playSuccessSound();
