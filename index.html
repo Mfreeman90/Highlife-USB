@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Data Crack - HighLife Precision</title>
+    <title>Data Crack - Perfect Alignment</title>
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
@@ -20,7 +20,7 @@
             overflow: hidden; position: relative;
         }
 
-        /* Desktop Icons */
+        /* Desktop UI */
         .desktop-icon { position: absolute; display: flex; flex-direction: column; align-items: center; width: 100px; }
         .my-computer { top: 30px; left: 30px; }
         .power-off { top: 30px; right: 30px; }
@@ -33,30 +33,30 @@
         .window-frame {
             border: 3px solid #5baade;
             background-color: #050505;
-            box-shadow: 0 0 40px rgba(0,0,0,0.8);
-            width: 900px;
+            box-shadow: 0 0 50px rgba(0,0,0,0.9);
+            width: 1000px;
             z-index: 10;
             font-family: 'Orbitron', sans-serif;
         }
 
         .header {
-            border-bottom: 2px solid #f7931e;
-            padding: 10px;
+            border-bottom: 3px solid #f7931e;
+            padding: 15px;
             text-align: center;
             background: #000;
         }
 
-        .header-title { color: #f7931e; font-size: 3.5rem; font-weight: 900; margin: 0; letter-spacing: 4px; }
-        .header-subtitle { color: #f7931e; font-size: 0.8rem; margin-top: -5px; letter-spacing: 2px; opacity: 0.8; }
+        .header-title { color: #f7931e; font-size: 4rem; font-weight: 900; margin: 0; letter-spacing: 5px; }
+        .header-subtitle { color: #f7931e; font-size: 0.9rem; margin-top: -5px; letter-spacing: 2px; }
 
         .crack-container { 
             position: relative; 
             background-color: #000;
             background-image: 
-                linear-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255, 255, 255, 0.08) 1px, transparent 1px);
-            background-size: 35px 35px;
-            height: 550px;
+                linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+            background-size: 40px 40px;
+            height: 600px;
             display: grid; 
             grid-template-columns: repeat(8, 1fr); 
             padding: 0 40px;
@@ -64,24 +64,24 @@
             overflow: hidden;
         }
 
-        /* The Red Box Boundary */
         .red-boundary { 
             position: absolute; 
-            top: 25px; bottom: 25px; left: 140px; right: 140px; 
-            border: 3px solid #ff0000; 
+            top: 40px; bottom: 40px; left: 150px; right: 150px; 
+            border: 4px solid #ff0000; 
             pointer-events: none; 
             z-index: 1; 
         }
 
-        /* The Target Line - Fixed exactly in the middle */
+        /* Thicker Red Line */
         .target-line { 
             position: absolute; 
             width: 100%; 
-            height: 12px; 
+            height: 18px; 
             background: #ff0000; 
             top: 50%;
             transform: translateY(-50%);
             z-index: 5; 
+            box-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
         }
 
         .slider-column { 
@@ -90,25 +90,24 @@
             align-items: center; 
             height: 100%; 
             position: relative; 
-            z-index: 2;
+            z-index: 6; /* Higher than red line so it passes "through" the gap */
         }
         
-        /* White Bars - Long like the image */
-        .part { background-color: white; width: 30px; height: 180px; }
+        .part { background-color: white; width: 35px; height: 180px; }
         
-        /* The Gap - Sized to fit the 12px red bar perfectly */
-        .spacer { height: 25px; background: transparent; } 
+        /* Bigger Gap (Spacer) */
+        .spacer { height: 35px; background: transparent; } 
 
         .active .part { 
-            outline: 3px solid #fdf5a2; 
-            box-shadow: 0 0 15px #fdf5a2; 
+            outline: 4px solid #fdf5a2; 
+            box-shadow: 0 0 20px #fdf5a2; 
         }
 
         .win-message { 
             position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); 
-            color: #00ff00; font-size: 3rem; z-index: 20; 
-            text-shadow: 0 0 20px #00ff00; font-weight: 900;
-            background: rgba(0,0,0,0.95); padding: 30px; border: 2px solid #00ff00;
+            color: #00ff00; font-size: 3.5rem; z-index: 20; 
+            text-shadow: 0 0 25px #00ff00; font-weight: 900;
+            background: rgba(0,0,0,0.95); padding: 40px; border: 2px solid #00ff00;
             width: 80%; text-align: center;
         }
     </style>
@@ -133,10 +132,10 @@
             const initGame = () => {
                 animations.current.forEach(anim => anim && anim.pause());
                 animations.current = bars.map((i) => {
-                    const speed = 800 - (i * 50); 
+                    const speed = 750 - (i * 45); 
                     return anime({
                         targets: `#col-${i}`,
-                        translateY: [-210, 210], 
+                        translateY: [-220, 220], 
                         duration: speed, 
                         direction: 'alternate',
                         loop: true,
@@ -161,17 +160,19 @@
                     const spacerCenter = spacer.top + (spacer.height / 2);
                     const targetCenter = targetLine.top + (targetLine.height / 2);
                     
-                    // Precise Hit Window
-                    const isHit = Math.abs(spacerCenter - targetCenter) < 10;
+                    // Hit logic based on gap alignment
+                    const isHit = Math.abs(spacerCenter - targetCenter) < (spacer.height / 2);
 
                     if (isHit) {
                         animations.current[activeIndex].pause();
 
-                        // Perfect Snap: Aligns the gap center to the container center (0)
+                        // PERFECT MIDDLE SNAP
+                        // We set translateY to 0 because the column is centered 
+                        // in a flex-aligned container, placing the gap exactly in the middle.
                         anime({
                             targets: `#col-${activeIndex}`,
                             translateY: 0, 
-                            duration: 50,
+                            duration: 60,
                             easing: 'easeOutQuad'
                         });
 
@@ -183,7 +184,7 @@
                                 setLockedBars([]);
                                 setActiveIndex(0);
                                 setWon(false);
-                            }, 3000);
+                            }, 4000);
                         } else { 
                             setActiveIndex(activeIndex + 1); 
                         }
@@ -208,14 +209,14 @@
                     <div className="crack-container">
                         <div className="red-boundary"></div>
                         <div className="target-line" />
-                        {won && <div className="win-message">SUCCESSFUL DECRYPTION</div>}
+                        {won && <div className="win-message">ACCESS GRANTED</div>}
                         
                         {bars.map((i) => (
                             <div 
                                 key={`${won}-${i}`}
                                 id={`col-${i}`} 
                                 className={`slider-column ${i === activeIndex ? 'active' : ''}`}
-                                style={{ marginLeft: i === 0 ? '120px' : '0' }}
+                                style={{ marginLeft: i === 0 ? '130px' : '0' }}
                             >
                                 <div className="part" />
                                 <div className="spacer" ref={refs.current[i]} />
