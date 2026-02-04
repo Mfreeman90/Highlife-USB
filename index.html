@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Data Crack - Perfect Alignment</title>
+    <title>Data Crack - HighLife RP Edition</title>
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
@@ -20,23 +20,15 @@
             overflow: hidden; position: relative;
         }
 
-        /* Desktop UI */
-        .desktop-icon { position: absolute; display: flex; flex-direction: column; align-items: center; width: 100px; }
-        .my-computer { top: 30px; left: 30px; }
-        .power-off { top: 30px; right: 30px; }
-        .icon-box { width: 60px; height: 60px; margin-bottom: 5px; background-size: contain; background-repeat: no-repeat; background-position: center; }
-        .computer-img { background-image: url('https://img.icons8.com/fluency/96/computer.png'); }
-        .power-img { background-image: url('https://img.icons8.com/fluency/96/shutdown.png'); }
-        .icon-label { font-size: 14px; text-shadow: 1px 1px 2px #000; }
-
         /* Window Frame */
         .window-frame {
             border: 3px solid #5baade;
             background-color: #050505;
             box-shadow: 0 0 50px rgba(0,0,0,0.9);
-            width: 1000px;
+            width: 900px;
             z-index: 10;
             font-family: 'Orbitron', sans-serif;
+            overflow: hidden;
         }
 
         .header {
@@ -46,33 +38,25 @@
             background: #000;
         }
 
-        .header-title { color: #f7931e; font-size: 4rem; font-weight: 900; margin: 0; letter-spacing: 5px; }
-        .header-subtitle { color: #f7931e; font-size: 0.9rem; margin-top: -5px; letter-spacing: 2px; }
+        .header-title { color: #f7931e; font-size: 3.5rem; font-weight: 900; margin: 0; letter-spacing: 5px; }
+        .header-subtitle { color: #f7931e; font-size: 0.8rem; margin-top: -5px; letter-spacing: 2px; }
 
-        .crack-container { 
-            position: relative; 
+        /* The Game Box */
+        .game-viewport {
+            position: relative;
+            height: 500px;
             background-color: #000;
             background-image: 
                 linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
                 linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
-            background-size: 40px 40px;
-            height: 600px;
-            display: grid; 
-            grid-template-columns: repeat(8, 1fr); 
-            padding: 0 40px;
-            align-items: center;
-            overflow: hidden;
+            background-size: 35px 35px;
+            margin: 30px auto;
+            width: 750px;
+            border: 4px solid #ff0000; /* This is the red boundary */
+            overflow: hidden; /* This keeps bars from going outside */
         }
 
-        .red-boundary { 
-            position: absolute; 
-            top: 40px; bottom: 40px; left: 150px; right: 150px; 
-            border: 4px solid #ff0000; 
-            pointer-events: none; 
-            z-index: 1; 
-        }
-
-        /* Thicker Red Line */
+        /* Thicker Red Target Line */
         .target-line { 
             position: absolute; 
             width: 100%; 
@@ -81,22 +65,31 @@
             top: 50%;
             transform: translateY(-50%);
             z-index: 5; 
-            box-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+        }
+
+        .bars-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            gap: 25px; /* Perfect spacing between bars */
+            padding: 0 20px;
         }
 
         .slider-column { 
             display: flex; 
             flex-direction: column; 
             align-items: center; 
-            height: 100%; 
+            height: 1000px; /* Long enough to scroll through viewport */
             position: relative; 
-            z-index: 6; /* Higher than red line so it passes "through" the gap */
+            z-index: 6;
         }
         
-        .part { background-color: white; width: 35px; height: 180px; }
+        /* Thicker White Bars */
+        .part { background-color: white; width: 45px; height: 180px; }
         
-        /* Bigger Gap (Spacer) */
-        .spacer { height: 35px; background: transparent; } 
+        /* The Gap - Sized for the 18px red line */
+        .spacer { height: 32px; background: transparent; } 
 
         .active .part { 
             outline: 4px solid #fdf5a2; 
@@ -105,7 +98,7 @@
 
         .win-message { 
             position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); 
-            color: #00ff00; font-size: 3.5rem; z-index: 20; 
+            color: #00ff00; font-size: 3rem; z-index: 20; 
             text-shadow: 0 0 25px #00ff00; font-weight: 900;
             background: rgba(0,0,0,0.95); padding: 40px; border: 2px solid #00ff00;
             width: 80%; text-align: center;
@@ -113,9 +106,6 @@
     </style>
 </head>
 <body>
-    <div class="desktop-icon my-computer"><div class="icon-box computer-img"></div><div class="icon-label">My Computer</div></div>
-    <div class="desktop-icon power-off"><div class="icon-box power-img"></div><div class="icon-label">Power Off</div></div>
-
     <div id="root"></div>
 
     <script type="text/babel">
@@ -132,10 +122,10 @@
             const initGame = () => {
                 animations.current.forEach(anim => anim && anim.pause());
                 animations.current = bars.map((i) => {
-                    const speed = 750 - (i * 45); 
+                    const speed = 800 - (i * 50); 
                     return anime({
                         targets: `#col-${i}`,
-                        translateY: [-220, 220], 
+                        translateY: [-250, 250], 
                         duration: speed, 
                         direction: 'alternate',
                         loop: true,
@@ -160,19 +150,17 @@
                     const spacerCenter = spacer.top + (spacer.height / 2);
                     const targetCenter = targetLine.top + (targetLine.height / 2);
                     
-                    // Hit logic based on gap alignment
+                    // Hit logic
                     const isHit = Math.abs(spacerCenter - targetCenter) < (spacer.height / 2);
 
                     if (isHit) {
                         animations.current[activeIndex].pause();
 
-                        // PERFECT MIDDLE SNAP
-                        // We set translateY to 0 because the column is centered 
-                        // in a flex-aligned container, placing the gap exactly in the middle.
+                        // SNAP TO ABSOLUTE CENTER
                         anime({
                             targets: `#col-${activeIndex}`,
                             translateY: 0, 
-                            duration: 60,
+                            duration: 50,
                             easing: 'easeOutQuad'
                         });
 
@@ -180,11 +168,6 @@
                         
                         if (activeIndex === bars.length - 1) {
                             setWon(true);
-                            setTimeout(() => { 
-                                setLockedBars([]);
-                                setActiveIndex(0);
-                                setWon(false);
-                            }, 4000);
                         } else { 
                             setActiveIndex(activeIndex + 1); 
                         }
@@ -206,23 +189,23 @@
                         <div className="header-subtitle">SELLING YOUR SECRETS SINCE 1996</div>
                     </div>
                     
-                    <div className="crack-container">
-                        <div className="red-boundary"></div>
+                    <div className="game-viewport">
                         <div className="target-line" />
                         {won && <div className="win-message">ACCESS GRANTED</div>}
                         
-                        {bars.map((i) => (
-                            <div 
-                                key={`${won}-${i}`}
-                                id={`col-${i}`} 
-                                className={`slider-column ${i === activeIndex ? 'active' : ''}`}
-                                style={{ marginLeft: i === 0 ? '130px' : '0' }}
-                            >
-                                <div className="part" />
-                                <div className="spacer" ref={refs.current[i]} />
-                                <div className="part" />
-                            </div>
-                        ))}
+                        <div className="bars-container">
+                            {bars.map((i) => (
+                                <div 
+                                    key={`${won}-${i}`}
+                                    id={`col-${i}`} 
+                                    className={`slider-column ${i === activeIndex ? 'active' : ''}`}
+                                >
+                                    <div className="part" />
+                                    <div className="spacer" ref={refs.current[i]} />
+                                    <div className="part" />
+                                </div>
+                            ))}
+                        </div>
                     </div>
                 </div>
             );
