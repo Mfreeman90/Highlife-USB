@@ -69,16 +69,32 @@
 <body>
     <div id="rick-overlay">
         <h1 style="font-family: Orbitron; color: #ff4444; margin-bottom: 20px;">CRITICAL SYSTEM ERROR: YOU GOT RICKED</h1>
-        <iframe width="800" height="450" src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1&controls=0" frameborder="0" allow="autoplay; encrypted-media"></iframe>
-        <button class="action-btn fail-btn" style="margin-top: 20px;" onclick="location.reload()">REBOOT SYSTEM</button>
+        <div id="video-container"></div>
+        <button class="action-btn fail-btn" style="margin-top: 20px;" onclick="stopRickRoll()">REBOOT SYSTEM</button>
     </div>
+
+    <script>
+        function startRickRoll() {
+            const container = document.getElementById('video-container');
+            // Inject the iframe to ensure it starts playing on click
+            container.innerHTML = '<iframe width="800" height="450" src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1&controls=0&mute=0" frameborder="0" allow="autoplay; encrypted-media"></iframe>';
+            document.getElementById('rick-overlay').style.display = 'flex';
+        }
+
+        function stopRickRoll() {
+            document.getElementById('video-container').innerHTML = ''; // Kill the video/audio
+            document.getElementById('rick-overlay').style.display = 'none';
+            // Optional: Reload the whole app to reset the state
+            location.reload();
+        }
+    </script>
 
     <div class="my-pc" onclick="alert('Drive C:/ is locked.')">
         <div class="pc-icon">💽</div>
         <div class="pc-text">My<br>Computer</div>
     </div>
 
-    <div class="power-off" onclick="document.getElementById('rick-overlay').style.display='flex'">
+    <div class="power-off" onclick="startRickRoll()">
         <div class="power-circle"><span class="power-symbol">⏻</span></div>
         <div class="power-text" style="color:#ccc; font-size:0.8rem; font-weight:bold; margin-top:8px;">Power Off</div>
     </div>
