@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Data Crack - High Speed Finale</title>
+    <title>Data Crack - Balanced Finale</title>
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
@@ -14,18 +14,88 @@
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@600;900&display=swap');
         
         body { 
-            margin: 0; background-color: #3e166b;
-            color: white; font-family: 'Arial', sans-serif; 
-            display: flex; justify-content: center; align-items: center; height: 100vh; 
+            margin: 0; 
+            background-color: #3e166b;
+            color: white; 
+            font-family: 'Arial', sans-serif; 
+            height: 100vh; 
             overflow: hidden;
+            background-image: radial-gradient(circle, rgba(255,255,255,0.05) 1px, transparent 1px);
+            background-size: 40px 40px;
         }
 
+        /* Desktop Icons */
+        .desktop-icon {
+            position: absolute;
+            top: 30px;
+            left: 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 80px;
+            text-align: center;
+            font-size: 0.8rem;
+            text-shadow: 1px 1px 2px black;
+        }
+        .icon-img {
+            width: 50px;
+            height: 50px;
+            background: #5baade;
+            border-radius: 5px;
+            margin-bottom: 5px;
+            box-shadow: inset -2px -2px 5px rgba(0,0,0,0.5);
+            display: flex; justify-content: center; align-items: center;
+            font-size: 1.5rem;
+        }
+
+        /* Power Button */
+        .power-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid #ff4444;
+            border-radius: 50%;
+            display: flex; justify-content: center; align-items: center;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .power-btn:hover { background: #ff4444; }
+        .power-icon { font-size: 2rem; color: #ff4444; }
+        .power-btn:hover .power-icon { color: white; }
+
+        /* Notepad Styling */
+        .notepad {
+            position: absolute;
+            top: 100px;
+            right: 50px;
+            width: 250px;
+            background: #f0f0f0;
+            border: 2px solid #888;
+            box-shadow: 5px 5px 15px rgba(0,0,0,0.5);
+            color: black;
+            font-family: 'Courier New', Courier, monospace;
+            z-index: 50;
+        }
+        .notepad-header {
+            background: #000080;
+            color: white;
+            padding: 3px 8px;
+            font-size: 0.7rem;
+            display: flex; justify-content: space-between;
+        }
+        .notepad-content { padding: 10px; font-weight: bold; font-size: 0.9rem; }
+
+        /* Main Game Window */
         .window-frame {
             border: 3px solid #5baade;
             background-color: #050505;
             width: 900px;
             font-family: 'Orbitron', sans-serif;
             position: relative;
+            z-index: 10;
         }
 
         .header {
@@ -147,16 +217,18 @@
             const initGame = () => {
                 animations.current.forEach(anim => anim && anim.pause());
                 animations.current = bars.map((i) => {
-                    // BASE SPEED: Starts fast and gets progressively harder
                     let speed = 750 - (i * 90);
                     
-                    // FINALE: If it's the 6th or 7th bar (index 5 or 6), make them extra fast
-                    if (i >= 5) { speed -= 100; } 
+                    // RECALIBRATED FINALE:
+                    // 6th Bar (Index 5)
+                    if (i === 5) { speed = 350; } 
+                    // 7th Bar (Index 6) - Slowed down from 200 to 280
+                    if (i === 6) { speed = 280; } 
                     
                     return anime({
                         targets: `#col-${i}`,
                         translateY: [-180, 180], 
-                        duration: Math.max(speed, 200), // High speed floor
+                        duration: speed,
                         direction: 'alternate',
                         loop: true,
                         easing: 'easeInOutSine',
@@ -207,31 +279,53 @@
             }, [activeIndex, won, started]);
 
             return (
-                <div className="window-frame">
-                    {!started && (
-                        <div className="start-overlay">
-                            <button className="start-btn" onClick={() => setStarted(true)}>START HACK</button>
-                        </div>
-                    )}
-                    <div className="header">
-                        <h1 className="header-title">DATA CRACK</h1>
+                <div style={{display:'flex', justifyContent:'center', alignItems:'center', width:'100vw', height:'100vh', position: 'relative'}}>
+                    
+                    <div className="desktop-icon">
+                        <div className="icon-img">💻</div>
+                        <span>My Computer</span>
                     </div>
-                    <div className="game-viewport">
-                        <div className="target-line" />
-                        <div className="bars-container">
-                            {bars.map((i) => (
-                                <div 
-                                    key={i}
-                                    id={`col-${i}`} 
-                                    className={`slider-column ${i === activeIndex ? 'active' : ''}`}
-                                >
-                                    <div className="part" />
-                                    <div className="spacer" ref={refs.current[i]} />
-                                    <div className="part" />
-                                </div>
-                            ))}
+
+                    <div className="power-btn" onClick={() => window.location.reload()}>
+                        <span className="power-icon">⏻</span>
+                    </div>
+
+                    <div className="notepad">
+                        <div className="notepad-header">
+                            <span>MateoStrap Loves you - Notepad</span>
+                            <span>✖</span>
                         </div>
-                        {won && <div className="win-message">ACCESS GRANTED</div>}
+                        <div className="notepad-content">
+                            MateoStrap Loves you.
+                        </div>
+                    </div>
+
+                    <div className="window-frame">
+                        {!started && (
+                            <div className="start-overlay">
+                                <button className="start-btn" onClick={() => setStarted(true)}>START HACK</button>
+                            </div>
+                        )}
+                        <div className="header">
+                            <h1 className="header-title">DATA CRACK</h1>
+                        </div>
+                        <div className="game-viewport">
+                            <div className="target-line" />
+                            <div className="bars-container">
+                                {bars.map((i) => (
+                                    <div 
+                                        key={i}
+                                        id={`col-${i}`} 
+                                        className={`slider-column ${i === activeIndex ? 'active' : ''}`}
+                                    >
+                                        <div className="part" />
+                                        <div className="spacer" ref={refs.current[i]} />
+                                        <div className="part" />
+                                    </div>
+                                ))}
+                            </div>
+                            {won && <div className="win-message">ACCESS GRANTED</div>}
+                        </div>
                     </div>
                 </div>
             );
