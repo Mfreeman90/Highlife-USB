@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Data Crack - Full Desktop Environment</title>
+    <title>Data Crack - Security Alert</title>
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
@@ -14,171 +14,78 @@
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@600;900&display=swap');
         
         body { 
-            margin: 0; 
-            background-color: #3e166b;
-            color: white; 
-            font-family: 'Arial', sans-serif; 
-            height: 100vh; 
-            overflow: hidden;
+            margin: 0; background-color: #3e166b; color: white; 
+            font-family: 'Arial', sans-serif; height: 100vh; overflow: hidden;
             background-image: radial-gradient(circle, rgba(255,255,255,0.05) 1px, transparent 1px);
             background-size: 40px 40px;
         }
 
         /* Desktop UI */
-        .my-pc {
-            position: absolute;
-            top: 40px;
-            left: 40px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            cursor: pointer;
-            z-index: 5;
-        }
-        .pc-icon {
-            width: 55px;
-            height: 65px;
-            background: linear-gradient(to bottom, #7db9e8 0%, #1e5799 100%);
-            border: 2px solid #ffffff;
-            border-radius: 4px;
-            box-shadow: 4px 4px 10px rgba(0,0,0,0.3);
-            display: flex; justify-content: center; align-items: center;
-            font-size: 1.8rem;
-        }
+        .my-pc { position: absolute; top: 40px; left: 40px; display: flex; flex-direction: column; align-items: center; cursor: pointer; z-index: 5; }
+        .pc-icon { width: 55px; height: 65px; background: linear-gradient(to bottom, #7db9e8 0%, #1e5799 100%); border: 2px solid #ffffff; border-radius: 4px; display: flex; justify-content: center; align-items: center; font-size: 1.8rem; }
         .pc-text { margin-top: 8px; font-weight: bold; text-shadow: 2px 2px 4px black; text-align: center; font-size: 0.9rem; }
 
-        .power-off {
-            position: absolute;
-            top: 40px;
-            right: 40px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            cursor: pointer;
-            z-index: 5;
-        }
-        .power-circle {
-            width: 70px;
-            height: 70px;
-            background: #222;
-            border: 4px solid #ff4444;
-            border-radius: 50%;
-            display: flex; justify-content: center; align-items: center;
-            box-shadow: 0 0 20px rgba(255, 68, 68, 0.4);
-            transition: 0.2s;
-        }
-        .power-circle:hover { transform: scale(1.05); box-shadow: 0 0 30px rgba(255, 68, 68, 0.6); }
+        .power-off { position: absolute; top: 40px; right: 40px; display: flex; flex-direction: column; align-items: center; cursor: pointer; z-index: 5; }
+        .power-circle { width: 70px; height: 70px; background: #222; border: 4px solid #ff4444; border-radius: 50%; display: flex; justify-content: center; align-items: center; box-shadow: 0 0 20px rgba(255, 68, 68, 0.4); }
         .power-symbol { font-size: 2.5rem; color: #ff4444; font-weight: bold; }
-        .power-text { margin-top: 8px; font-weight: bold; text-shadow: 2px 2px 4px black; color: #ccc; font-size: 0.8rem; }
 
-        /* Shutdown Overlay */
-        #shutdown-screen {
-            position: fixed; inset: 0; background: black; z-index: 1000;
+        /* Notepad */
+        .notepad { position: absolute; top: 120px; right: 50px; width: 250px; background: #f0f0f0; border: 2px solid #888; box-shadow: 5px 5px 15px rgba(0,0,0,0.5); color: black; font-family: 'Courier New', monospace; z-index: 50; }
+        .notepad-header { background: #000080; color: white; padding: 3px 8px; font-size: 0.7rem; display: flex; justify-content: space-between; }
+        .notepad-content { padding: 10px; font-weight: bold; }
+
+        /* Rick Roll Overlay */
+        #rick-overlay {
+            position: fixed; inset: 0; background: black; z-index: 2000;
             display: none; flex-direction: column; justify-content: center; align-items: center;
         }
 
-        /* Notepad Styling */
-        .notepad {
-            position: absolute; top: 120px; right: 50px; width: 250px;
-            background: #f0f0f0; border: 2px solid #888;
-            box-shadow: 5px 5px 15px rgba(0,0,0,0.5); color: black;
-            font-family: 'Courier New', Courier, monospace; z-index: 50;
-        }
-        .notepad-header { background: #000080; color: white; padding: 3px 8px; font-size: 0.7rem; display: flex; justify-content: space-between; }
-        .notepad-content { padding: 10px; font-weight: bold; font-size: 0.9rem; }
-
-        /* Main Game Window */
-        .window-frame {
-            border: 3px solid #5baade;
-            background-color: #050505;
-            width: 900px;
-            font-family: 'Orbitron', sans-serif;
-            position: relative;
-            z-index: 10;
-        }
+        /* Game Window */
+        .window-frame { border: 3px solid #5baade; background-color: #050505; width: 900px; font-family: 'Orbitron', sans-serif; position: relative; z-index: 10; }
         .header { border-bottom: 2px solid #f7931e; padding: 12px; text-align: center; background: #000; }
         .header-title { color: #f7931e; font-size: 3rem; font-weight: 900; margin: 0; letter-spacing: 4px; }
-        .sub-header { color: #fdf5a2; font-size: 0.8rem; letter-spacing: 2px; margin-top: -5px; }
+        .sub-header { color: #fdf5a2; font-size: 0.8rem; margin-top: -5px; }
 
-        .game-viewport {
-            position: relative; height: 550px; margin: 30px auto; width: 800px;
-            border: 3px solid #ff0000; background-color: #000; overflow: hidden; 
-            background-image: linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px);
-            background-size: 50px 50px;
-        }
-
-        .target-line { 
-            position: absolute; width: 100%; height: 25px; background: #ff0000; 
-            top: 50%; transform: translateY(-50%); z-index: 1; 
-        }
-
-        .bars-container {
-            display: flex; justify-content: center; align-items: center; height: 100%;
-            gap: 35px; position: relative; z-index: 10;
-        }
-
+        .game-viewport { position: relative; height: 550px; margin: 30px auto; width: 800px; border: 3px solid #ff0000; background-color: #000; overflow: hidden; }
+        .target-line { position: absolute; width: 100%; height: 25px; background: #ff0000; top: 50%; transform: translateY(-50%); z-index: 1; }
+        .bars-container { display: flex; justify-content: center; align-items: center; height: 100%; gap: 35px; position: relative; z-index: 10; }
         .slider-column { display: flex; flex-direction: column; align-items: center; position: relative; }
         .part { background-color: white; width: 45px; height: 150px; }
         .spacer { height: 40px; background: transparent; width: 100%; } 
         .active .part { outline: 4px solid #fdf5a2; box-shadow: 0 0 15px #fdf5a2; }
 
-        .win-message, .fail-message { 
-            position: absolute; top: 50%; left: 50%; transform: translate(-50% , -50%); 
-            z-index: 100; background: rgba(0,0,0,0.95); padding: 30px; 
-            text-align: center; width: 85%;
-            display: flex; flex-direction: column; align-items: center;
-            gap: 20px;
-        }
-
+        .win-message, .fail-message { position: absolute; top: 50%; left: 50%; transform: translate(-50% , -50%); z-index: 100; background: rgba(0,0,0,0.95); padding: 30px; text-align: center; width: 85%; display: flex; flex-direction: column; align-items: center; gap: 20px; }
         .win-message { color: #00ff00; border: 3px solid #00ff00; font-size: 3.5rem; }
         .fail-message { color: #ff0000; border: 3px solid #ff0000; font-size: 3.5rem; }
 
-        .action-btn {
-            color: black; border: none; padding: 10px 30px;
-            font-family: 'Orbitron'; font-size: 1.5rem; cursor: pointer; font-weight: 900;
-            border-radius: 4px; transition: 0.2s;
-        }
+        .action-btn { color: black; border: none; padding: 10px 30px; font-family: 'Orbitron'; font-size: 1.5rem; cursor: pointer; font-weight: 900; border-radius: 4px; }
         .win-btn { background: #00ff00; }
-        .win-btn:hover { background: #00cc00; transform: scale(1.05); }
         .fail-btn { background: #ff0000; }
-        .fail-btn:hover { background: #cc0000; transform: scale(1.05); }
 
-        .start-overlay {
-            position: absolute; inset: 0; background: rgba(0,0,0,0.95);
-            display: flex; justify-content: center; align-items: center; z-index: 200;
-        }
-        .start-btn {
-            background: #f7931e; color: black; border: none; padding: 20px 60px;
-            font-family: 'Orbitron'; font-size: 2rem; cursor: pointer; font-weight: 900;
-            border-radius: 4px; box-shadow: 0 0 20px rgba(247, 147, 30, 0.4);
-        }
+        .start-overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.95); display: flex; justify-content: center; align-items: center; z-index: 200; }
+        .start-btn { background: #f7931e; color: black; border: none; padding: 20px 60px; font-family: 'Orbitron'; font-size: 2rem; cursor: pointer; font-weight: 900; }
     </style>
 </head>
 <body>
-    <div class="my-pc" onclick="alert('System Storage: 99% Full')">
+    <div id="rick-overlay">
+        <h1 style="font-family: Orbitron; color: #ff4444; margin-bottom: 20px;">CRITICAL SYSTEM ERROR: YOU GOT RICKED</h1>
+        <iframe width="800" height="450" src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1&controls=0" frameborder="0" allow="autoplay; encrypted-media"></iframe>
+        <button class="action-btn fail-btn" style="margin-top: 20px;" onclick="location.reload()">REBOOT SYSTEM</button>
+    </div>
+
+    <div class="my-pc" onclick="alert('Drive C:/ is locked.')">
         <div class="pc-icon">💽</div>
         <div class="pc-text">My<br>Computer</div>
     </div>
 
-    <div class="power-off" id="powerBtn">
-        <div class="power-circle">
-            <span class="power-symbol">⏻</span>
-        </div>
-        <div class="power-text">Power Off</div>
+    <div class="power-off" onclick="document.getElementById('rick-overlay').style.display='flex'">
+        <div class="power-circle"><span class="power-symbol">⏻</span></div>
+        <div class="power-text" style="color:#ccc; font-size:0.8rem; font-weight:bold; margin-top:8px;">Power Off</div>
     </div>
 
     <div class="notepad">
-        <div class="notepad-header">
-            <span>MateoStrap Loves you - Notepad</span>
-            <span>✖</span>
-        </div>
-        <div class="notepad-content">
-            MateoStrap Loves you.
-        </div>
-    </div>
-
-    <div id="shutdown-screen">
-        <h1 style="font-family: Orbitron; color: #ff4444;">SHUTTING DOWN...</h1>
+        <div class="notepad-header"><span>MateoStrap Loves you - Notepad</span><span>✖</span></div>
+        <div class="notepad-content">MateoStrap Loves you.</div>
     </div>
 
     <div id="root"></div>
@@ -194,69 +101,26 @@
             const bars = [0, 1, 2, 3, 4, 5, 6]; 
             const refs = useRef(bars.map(() => React.createRef()));
             const animations = useRef([]);
-            const audioCtx = useRef(null);
 
-            useEffect(() => {
-                const btn = document.getElementById('powerBtn');
-                btn.onclick = () => {
-                    const screen = document.getElementById('shutdown-screen');
-                    screen.style.display = 'flex';
-                    setTimeout(() => window.location.reload(), 2000);
-                };
-            }, []);
-
-            // Shared animation logic for Win/Fail messages
             useEffect(() => {
                 const target = won ? '#success-text' : failed ? '#fail-text' : null;
                 if (target) {
-                    anime.timeline()
-                    .add({
-                        targets: target,
-                        scale: [0.5, 1.2, 1],
-                        opacity: [0, 1],
-                        duration: 600,
-                        easing: 'easeOutBack'
-                    })
-                    .add({
-                        targets: target,
-                        scale: [1, 1.05, 1],
-                        duration: 1000,
-                        loop: true,
-                        easing: 'easeInOutSine'
+                    anime.timeline().add({
+                        targets: target, scale: [0.5, 1.2, 1], opacity: [0, 1], duration: 600, easing: 'easeOutBack'
+                    }).add({
+                        targets: target, scale: [1, 1.05, 1], duration: 1000, loop: true, easing: 'easeInOutSine'
                     });
                 }
             }, [won, failed]);
-
-            const playSound = (freq) => {
-                if (!audioCtx.current) audioCtx.current = new (window.AudioContext || window.webkitAudioContext)();
-                const now = audioCtx.current.currentTime;
-                const osc = audioCtx.current.createOscillator();
-                const gain = audioCtx.current.createGain();
-                osc.type = 'square';
-                osc.frequency.setValueAtTime(freq, now);
-                gain.gain.setValueAtTime(0.1, now);
-                gain.gain.exponentialRampToValueAtTime(0.001, now + 0.1);
-                osc.connect(gain);
-                gain.connect(audioCtx.current.destination);
-                osc.start();
-                osc.stop(now + 0.1);
-            };
 
             const initGame = () => {
                 animations.current.forEach(anim => anim && anim.pause());
                 animations.current = bars.map((i) => {
                     let speed = 750 - (i * 90);
-                    if (i === 5) speed = 350; 
-                    if (i === 6) speed = 280; 
-                    
+                    if (i === 5) speed = 350; if (i === 6) speed = 280; 
                     return anime({
-                        targets: `#col-${i}`,
-                        translateY: [-180, 180], 
-                        duration: speed,
-                        direction: 'alternate',
-                        loop: true,
-                        easing: 'easeInOutSine',
-                        autoplay: true
+                        targets: `#col-${i}`, translateY: [-180, 180], duration: speed,
+                        direction: 'alternate', loop: true, easing: 'easeInOutSine', autoplay: true
                     });
                 });
             };
@@ -270,47 +134,27 @@
                 if (won || failed || !started) return;
                 const targetRect = document.querySelector('.target-line').getBoundingClientRect();
                 const spacerRect = refs.current[activeIndex].current.getBoundingClientRect();
-                const targetCenter = targetRect.top + (targetRect.height / 2);
-                const spacerCenter = spacerRect.top + (spacerRect.height / 2);
-                
-                const isHit = Math.abs(spacerCenter - targetCenter) < 22;
+                const isHit = Math.abs((spacerRect.top + spacerRect.height/2) - (targetRect.top + targetRect.height/2)) < 22;
 
                 if (isHit) {
-                    playSound(800);
                     animations.current[activeIndex].pause();
-                    anime({ targets: `#col-${activeIndex}`, translateY: 0, duration: 40, easing: 'linear' });
-
-                    if (activeIndex === bars.length - 1) {
-                        setWon(true);
-                    } else { 
-                        setActiveIndex(activeIndex + 1); 
-                    }
+                    anime({ targets: `#col-${activeIndex}`, translateY: 0, duration: 40 });
+                    if (activeIndex === 6) setWon(true);
+                    else setActiveIndex(activeIndex + 1);
                 } else {
                     if (activeIndex === 0) {
-                        playSound(150);
                         setFailed(true);
                         animations.current.forEach(a => a.pause());
                     } else {
-                        const prev = activeIndex - 1;
-                        animations.current[prev].play();
-                        setActiveIndex(prev);
+                        animations.current[activeIndex - 1].play();
+                        setActiveIndex(activeIndex - 1);
                     }
                 }
             };
 
             const resetGame = (e) => {
-                e.stopPropagation(); 
-                setWon(false);
-                setFailed(false);
-                setStarted(false);
-                setActiveIndex(0);
-                bars.forEach(i => {
-                    anime({
-                        targets: `#col-${i}`,
-                        translateY: 0,
-                        duration: 0
-                    });
-                });
+                e.stopPropagation(); setWon(false); setFailed(false); setStarted(false); setActiveIndex(0);
+                bars.forEach(i => anime({ targets: `#col-${i}`, translateY: 0, duration: 0 }));
             };
 
             useEffect(() => {
@@ -335,9 +179,7 @@
                             <div className="bars-container">
                                 {bars.map((i) => (
                                     <div key={i} id={`col-${i}`} className={`slider-column ${i === activeIndex ? 'active' : ''}`}>
-                                        <div className="part" />
-                                        <div className="spacer" ref={refs.current[i]} />
-                                        <div className="part" />
+                                        <div className="part" /><div className="spacer" ref={refs.current[i]} /><div className="part" />
                                     </div>
                                 ))}
                             </div>
@@ -359,8 +201,7 @@
             );
         };
 
-        const root = ReactDOM.createRoot(document.getElementById('root'));
-        root.render(<App />);
+        ReactDOM.createRoot(document.getElementById('root')).render(<App />);
     </script>
 </body>
 </html>
