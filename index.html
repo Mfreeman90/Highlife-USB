@@ -19,37 +19,48 @@
             display: flex; justify-content: center; align-items: center; height: 100vh; 
         }
 
-        .content { text-align: center; width: 100%; max-width: 600px; }
+        .content { text-align: center; width: 100%; max-width: 500px; }
         
         .crack-container { 
-            position: relative; background-color: #202020; border: 3px solid red; 
-            height: 400px; display: grid; grid-template-columns: repeat(6, 1fr); 
+            position: relative; 
+            background-color: #202020; 
+            border: 3px solid red; 
+            /* Scaled down height */
+            height: 300px; 
+            display: grid; 
+            grid-template-columns: repeat(6, 1fr); 
             overflow: hidden;
         }
 
         .target-bar { 
-            position: absolute; width: 100%; height: 35px; 
-            background: rgba(255, 0, 0, 0.8); top: 182px; z-index: 5; 
+            position: absolute; 
+            width: 100%; 
+            height: 30px; 
+            background: rgba(255, 0, 0, 0.8); 
+            /* Centered for 300px height */
+            top: 135px; 
+            z-index: 5; 
         }
 
         .slider-column { display: flex; flex-direction: column; align-items: center; height: 100%; }
-        .part { background-color: white; width: 45px; height: 100px; }
-        .spacer { height: 50px; } 
+        
+        .part { background-color: white; width: 35px; height: 80px; }
+        .spacer { height: 40px; } 
 
         .active .part { 
-            border: 4px solid yellow; box-shadow: 0 0 15px yellow; 
-            width: 37px; height: 92px;
+            border: 3px solid yellow; box-shadow: 0 0 10px yellow; 
+            width: 29px; height: 74px;
         }
 
         .locked .part { background-color: white; }
 
         .win-message { 
             position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); 
-            color: #00ff00; font-size: 2.5rem; z-index: 10; text-shadow: 0 0 20px #00ff00; 
+            color: #00ff00; font-size: 2rem; z-index: 10; text-shadow: 0 0 20px #00ff00; 
         }
 
-        .title { font-size: 3em; margin: 0; }
-        .catch-phrase { color: yellow; margin-bottom: 20px; font-size: 1rem; letter-spacing: 1px; }
+        .title { font-size: 2em; margin: 0; }
+        .catch-phrase { color: yellow; margin-bottom: 20px; font-size: 0.8rem; letter-spacing: 1px; }
     </style>
 </head>
 <body>
@@ -77,7 +88,7 @@
                     
                     return anime({
                         targets: `#col-${i}`,
-                        translateY: [0, 150],
+                        translateY: [0, 100], // Scaled translation
                         duration: speed, 
                         direction: 'alternate',
                         loop: true,
@@ -94,7 +105,6 @@
 
             useEffect(() => {
                 const handleInteraction = (e) => {
-                    // Trigger on left click (button 0) and ensure game isn't already won
                     if (!won) {
                         const coreRect = refs.current[activeIndex].current.getBoundingClientRect();
                         const targetRect = document.querySelector('.target-bar').getBoundingClientRect();
@@ -110,7 +120,7 @@
                             
                             anime({
                                 targets: `#col-${activeIndex}`,
-                                translateY: 75,
+                                translateY: 50, // Center position for locked bar
                                 duration: 40,
                                 easing: 'easeOutQuad'
                             });
@@ -145,7 +155,7 @@
                     <p className="catch-phrase">MateoStrap Loves you!</p>
                     <div className="crack-container">
                         <div className="target-bar" />
-                        {won && <div className="win-message">WINNER WINNER</div>}
+                        {won && <div className="win-message">SUCCESS</div>}
                         {bars.map((i) => (
                             <div 
                                 key={`${won}-${i}`}
@@ -158,7 +168,7 @@
                             </div>
                         ))}
                     </div>
-                    <p style={{marginTop:'20px'}}>CLICK ANYWHERE TO HACK</p>
+                    <p style={{marginTop:'20px', fontSize: '0.7rem'}}>CLICK ANYWHERE TO HACK</p>
                 </div>
             );
         };
