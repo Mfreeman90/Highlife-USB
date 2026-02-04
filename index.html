@@ -42,7 +42,6 @@
             background-position: center;
         }
 
-        /* Mock CSS Icons */
         .computer-img { background-image: url('https://img.icons8.com/fluency/96/computer.png'); }
         .power-img { background-image: url('https://img.icons8.com/fluency/96/shutdown.png'); }
 
@@ -120,7 +119,9 @@
         .slider-column { display: flex; flex-direction: column; align-items: center; height: 100%; position: relative; }
         
         .part { background-color: white; width: 45px; height: 160px; }
-        .spacer { height: 15px; background: transparent; } 
+        
+        /* CHANGED: Increased spacer height to make the "gaps" much bigger */
+        .spacer { height: 60px; background: transparent; } 
 
         .active .part { 
             outline: 5px solid #fdf5a2; 
@@ -163,11 +164,11 @@
             const initGame = () => {
                 animations.current.forEach(anim => anim.pause());
                 animations.current = bars.map((i) => {
-                    // Slight variation in speed to mimic your image
                     const speed = 650 - (i * 35); 
                     return anime({
                         targets: `#col-${i}`,
-                        translateY: [-180, 180], 
+                        /* Adjusted translateY for larger gaps */
+                        translateY: [-210, 210], 
                         duration: speed, 
                         direction: 'alternate',
                         loop: true,
@@ -189,6 +190,7 @@
                     const targetLine = document.querySelector('.target-line').getBoundingClientRect();
                     const spacer = refs.current[activeIndex].current.getBoundingClientRect();
                     
+                    // Hit detection logic based on spacer center
                     const isHit = (spacer.top + spacer.height/2 > targetLine.top) && 
                                   (spacer.top + spacer.height/2 < targetLine.bottom);
 
