@@ -77,10 +77,8 @@
             box-shadow: 0 0 15px rgba(255, 0, 0, 0.6); 
         }
 
-        /* UPDATED: Gap matched to new 46px width */
         .bars-container { display: flex; justify-content: center; align-items: center; height: 100%; gap: 46px; position: relative; z-index: 10; }
         
-        /* UPDATED: Rectangles increased to 46px width */
         .part { background-color: white; width: 46px; height: 130px; }
         .spacer { height: 40px; background: transparent; width: 100%; } 
         .active .part { outline: 4px solid #fdf5a2; box-shadow: 0 0 15px #fdf5a2; }
@@ -94,6 +92,7 @@
         .win-message { color: #00ff00; border: 4px solid #00ff00; }
         .fail-message { color: #ff0000; border: 4px solid #ff0000; }
         
+        .final-time { font-size: 1.5rem; color: #fff; margin-bottom: 10px; }
         .action-btn { color: black; border: none; padding: 12px 40px; font-family: 'Orbitron'; font-size: 1.8rem; cursor: pointer; font-weight: 900; border-radius: 4px; }
         .win-btn { background: #00ff00; }
         .fail-btn { background: #ff0000; }
@@ -121,6 +120,7 @@
             const [won, setWon] = useState(false);
             const [failed, setFailed] = useState(false);
             const [startTime, setStartTime] = useState(null);
+            const [finalTime, setFinalTime] = useState(null);
             const [bestTime, setBestTime] = useState(localStorage.getItem('dataCrackBest') || null);
             
             const bars = [0, 1, 2, 3, 4, 5, 6]; 
@@ -173,6 +173,7 @@
                     anime({ targets: `#col-${activeIndex}`, translateY: 0, duration: 40 });
                     if (activeIndex === 6) {
                         const timeTaken = ((Date.now() - startTime) / 1000).toFixed(2);
+                        setFinalTime(timeTaken);
                         if (!bestTime || parseFloat(timeTaken) < parseFloat(bestTime)) {
                             localStorage.setItem('dataCrackBest', timeTaken);
                             setBestTime(timeTaken);
@@ -194,7 +195,7 @@
 
             const resetGame = (e) => {
                 e.stopPropagation();
-                setWon(false); setFailed(false); setActiveIndex(0); setStartTime(null);
+                setWon(false); setFailed(false); setActiveIndex(0); setStartTime(null); setFinalTime(null);
                 bars.forEach(i => anime({ targets: `#col-${i}`, translateY: 0, duration: 0 }));
                 setTimeout(initGame, 50);
             };
@@ -232,6 +233,7 @@
                                 {won && (
                                     <div className="win-message">
                                         <h2 style={{fontSize:'4rem', margin:0}}>DECRYPTED</h2>
+                                        <div className="final-time">TIME: {finalTime} SECONDS</div>
                                         <button className="action-btn win-btn" onClick={resetGame}>RUN AGAIN</button>
                                     </div>
                                 )}
