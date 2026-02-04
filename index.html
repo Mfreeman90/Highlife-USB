@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Data Crack - HighLife Authentic Audio</title>
+    <title>Data Crack - 7 Bar Edition</title>
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
@@ -23,7 +23,7 @@
         .window-frame {
             border: 3px solid #5baade;
             background-color: #050505;
-            width: 950px;
+            width: 900px; /* Adjusted for 7 bars */
             font-family: 'Orbitron', sans-serif;
             position: relative;
         }
@@ -41,7 +41,7 @@
             position: relative;
             height: 550px;
             margin: 30px auto;
-            width: 850px;
+            width: 800px;
             border: 3px solid #ff0000;
             background-color: #000;
             overflow: hidden; 
@@ -62,7 +62,7 @@
             justify-content: center;
             align-items: center;
             height: 100%;
-            gap: 30px; 
+            gap: 35px; /* Slightly wider gap for 7 bars */
             position: relative;
             z-index: 10;
         }
@@ -90,13 +90,13 @@
         }
 
         .start-overlay {
-            position: absolute; inset: 0; background: rgba(0,0,0,0.9);
+            position: absolute; inset: 0; background: rgba(0,0,0,0.95);
             display: flex; justify-content: center; align-items: center; z-index: 200;
         }
         .start-btn {
-            background: #f7931e; color: black; border: none; padding: 20px 40px;
-            font-family: 'Orbitron'; font-size: 1.5rem; cursor: pointer; font-weight: 900;
-            border-radius: 4px;
+            background: #f7931e; color: black; border: none; padding: 20px 60px;
+            font-family: 'Orbitron'; font-size: 2rem; cursor: pointer; font-weight: 900;
+            border-radius: 4px; box-shadow: 0 0 20px rgba(247, 147, 30, 0.4);
         }
     </style>
 </head>
@@ -110,75 +110,49 @@
             const [activeIndex, setActiveIndex] = useState(0);
             const [won, setWon] = useState(false);
             const [started, setStarted] = useState(false);
-            const bars = [0, 1, 2, 3, 4, 5, 6, 7]; 
+            const bars = [0, 1, 2, 3, 4, 5, 6]; // EXACTLY 7 BARS
             const refs = useRef(bars.map(() => React.createRef()));
             const animations = useRef([]);
             const audioCtx = useRef(null);
 
-            // AUTHENTIC LOCK: Heavy Mechanical Clunk
-            const playLockSound = () => {
-                if (!audioCtx.current) return;
+            const playSuccessSound = () => {
+                if (!audioCtx.current) audioCtx.current = new (window.AudioContext || window.webkitAudioContext)();
                 const now = audioCtx.current.currentTime;
                 
-                // Deep thud
-                const osc = audioCtx.current.createOscillator();
-                const gain = audioCtx.current.createGain();
-                osc.type = 'triangle';
-                osc.frequency.setValueAtTime(80, now);
-                osc.frequency.exponentialRampToValueAtTime(30, now + 0.1);
-                gain.gain.setValueAtTime(0.4, now);
-                gain.gain.linearRampToValueAtTime(0, now + 0.15);
-                
-                osc.connect(gain);
-                gain.connect(audioCtx.current.destination);
-                osc.start(now);
-                osc.stop(now + 0.15);
+                // Sharp Click
+                const clickOsc = audioCtx.current.createOscillator();
+                const clickGain = audioCtx.current.createGain();
+                clickOsc.type = 'square';
+                clickOsc.frequency.setValueAtTime(800, now);
+                clickOsc.frequency.exponentialRampToValueAtTime(1200, now + 0.02);
+                clickGain.gain.setValueAtTime(0.1, now);
+                clickGain.gain.exponentialRampToValueAtTime(0.001, now + 0.04);
+                clickOsc.connect(clickGain);
+                clickGain.connect(audioCtx.current.destination);
+                clickOsc.start(now);
+                clickOsc.stop(now + 0.04);
 
-                // High metallic snap
-                const osc2 = audioCtx.current.createOscillator();
-                const gain2 = audioCtx.current.createGain();
-                osc2.type = 'square';
-                osc2.frequency.setValueAtTime(600, now);
-                gain2.gain.setValueAtTime(0.05, now);
-                gain2.gain.linearRampToValueAtTime(0, now + 0.05);
-                osc2.connect(gain2);
-                gain2.connect(audioCtx.current.destination);
-                osc2.start(now);
-                osc2.stop(now + 0.05);
-            };
-
-            // AUTHENTIC BELL: Fast, metallic rhythmic pulses
-            const startHeistBell = () => {
-                audioCtx.current = new (window.AudioContext || window.webkitAudioContext)();
-                
-                const playPulse = () => {
-                    const now = audioCtx.current.currentTime;
-                    const osc = audioCtx.current.createOscillator();
-                    const gain = audioCtx.current.createGain();
-                    
-                    // High-pitched ringing (metallic)
-                    osc.type = 'sine';
-                    osc.frequency.setValueAtTime(3200, now); 
-                    
-                    gain.gain.setValueAtTime(0, now);
-                    gain.gain.linearRampToValueAtTime(0.01, now + 0.01); 
-                    gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.1);
-                    
-                    osc.connect(gain);
-                    gain.connect(audioCtx.current.destination);
-                    osc.start(now);
-                    osc.stop(now + 0.15);
-                };
-
-                // Rapid repetition like the clip
-                setInterval(playPulse, 120); 
+                // Mechanical Clunk
+                const thudOsc = audioCtx.current.createOscillator();
+                const thudGain = audioCtx.current.createGain();
+                thudOsc.type = 'triangle';
+                thudOsc.frequency.setValueAtTime(120, now);
+                thudOsc.frequency.exponentialRampToValueAtTime(40, now + 0.12);
+                thudGain.gain.setValueAtTime(0.3, now);
+                thudGain.gain.linearRampToValueAtTime(0, now + 0.15);
+                thudOsc.connect(thudGain);
+                thudGain.connect(audioCtx.current.destination);
+                thudOsc.start(now);
+                thudOsc.stop(now + 0.15);
             };
 
             const initGame = () => {
                 animations.current.forEach(anim => anim && anim.pause());
                 animations.current = bars.map((i) => {
-                    let speed = 750 - (i * 80);
-                    if (i >= 6) { speed += 180; } 
+                    // Recalibrated speed for 7 bars
+                    let speed = 750 - (i * 90);
+                    if (i >= 5) { speed += 200; } // Slow down last two bars (index 5 & 6)
+                    
                     return anime({
                         targets: `#col-${i}`,
                         translateY: [-180, 180], 
@@ -205,7 +179,7 @@
                 const isHit = Math.abs(spacerCenter - targetCenter) < 18;
 
                 if (isHit) {
-                    playLockSound();
+                    playSuccessSound();
                     animations.current[activeIndex].pause();
                     anime({
                         targets: `#col-${activeIndex}`,
@@ -235,7 +209,7 @@
                 <div className="window-frame">
                     {!started && (
                         <div className="start-overlay">
-                            <button className="start-btn" onClick={() => {setStarted(true); startHeistBell();}}>START HACK</button>
+                            <button className="start-btn" onClick={() => setStarted(true)}>START HACK</button>
                         </div>
                     )}
                     <div className="header">
