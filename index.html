@@ -34,7 +34,7 @@
         .notepad-note { 
             position: absolute; top: 140px; right: 35px; 
             display: flex; flex-direction: column; align-items: center; 
-            cursor: grab; z-index: 100; width: 100px;
+            cursor: grab; z-index: 5000; width: 100px; /* High Z-Index to stay on top */
             transition: transform 0.1s ease;
         }
         .notepad-note:active { cursor: grabbing; }
@@ -45,18 +45,19 @@
         .note-lines { margin-top: 15px; width: 60%; height: 2px; background: #ccc; box-shadow: 0 6px 0 #ccc, 0 12px 0 #ccc; }
         .note-text { margin-top: 8px; font-weight: bold; font-size: 0.75rem; text-shadow: 2px 2px 4px black; text-align: center; color: white; line-height: 1.1; pointer-events: none; }
 
-        /* NEW MATEO LOVE WINDOW */
+        /* MATEO LOVE WINDOW */
         #love-popup {
             display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
             width: 320px; background: #c0c0c0; border: 3px solid #fff; border-right-color: #808080; 
-            border-bottom-color: #808080; z-index: 3000; padding: 2px; box-shadow: 10px 10px 20px rgba(0,0,0,0.5);
+            border-bottom-color: #808080; z-index: 6000; padding: 2px; box-shadow: 15px 15px 50px rgba(0,0,0,0.8);
         }
         .love-content { background: white; padding: 30px; text-align: center; color: black; border: 1px solid #808080; }
         .cash-btn { 
-            background: #28a745; color: white; border: 2px solid #1e7e34; padding: 10px 20px; 
+            background: #28a745; color: white; border: 2px solid #1e7e34; padding: 12px 20px; 
             font-weight: bold; cursor: pointer; text-decoration: none; display: inline-block; margin-top: 15px;
-            font-family: Arial, sans-serif;
+            font-family: Arial, sans-serif; border-radius: 4px;
         }
+        .cash-btn:hover { background: #218838; }
 
         /* Rick Roll Overlay */
         #rick-overlay { position: fixed; inset: 0; background: black; z-index: 2000; display: none; flex-direction: column; justify-content: center; align-items: center; }
@@ -114,12 +115,21 @@
     <div id="love-popup">
         <div class="os-title-bar">
             <span>Mateo.txt</span>
-            <div class="os-controls"><div class="os-btn" onclick="document.getElementById('love-popup').style.display='none'">X</div></div>
+            <div class="os-controls">
+                <div class="os-btn" onclick="document.getElementById('love-popup').style.display='none'">X</div>
+            </div>
         </div>
         <div class="love-content">
-            <h2 style="margin:0 0 10px 0;">Mateo loves you!</h2>
+            <h2 style="margin:0 0 10px 0; font-family: 'Segoe UI', sans-serif;">Mateo loves you!</h2>
             <a href="https://cash.app/$MattFreeman8" target="_blank" class="cash-btn">Donate to $MattFreeman8</a>
         </div>
+    </div>
+
+    <div class="notepad-note" id="notepad-icon">
+        <div class="note-icon">
+            <div class="note-lines" style="margin-left: 10px;"></div>
+        </div>
+        <div class="note-text">CLICK ME</div>
     </div>
 
     <script>
@@ -133,34 +143,42 @@
             document.getElementById('rick-overlay').style.display = 'none';
         }
 
-        function openMateoNote() {
+        let isDragging = false;
+        let offset = { x: 0, y: 0 };
+        const noteIcon = document.getElementById('notepad-icon');
+
+        // Logic to open the note
+        noteIcon.addEventListener('click', (e) => {
+            e.stopPropagation(); // Prevents game from clicking behind it
             if(!isDragging) {
                 document.getElementById('love-popup').style.display = 'block';
             }
-        }
+        });
 
-        let isDragging = false;
-        let offset = { x: 0, y: 0 };
+        // Dragging Logic
+        noteIcon.addEventListener('mousedown', (e) => {
+            isDragging = false; // Reset on new click
+            const startX = e.clientX;
+            const startY = e.clientY;
 
-        function initDrag() {
-            const note = document.querySelector('.notepad-note');
-            note.addEventListener('mousedown', (e) => {
-                isDragging = true;
-                offset.x = e.clientX - note.offsetLeft;
-                offset.y = e.clientY - note.offsetTop;
-            });
-            document.addEventListener('mousemove', (e) => {
-                if (!isDragging) return;
-                const note = document.querySelector('.notepad-note');
-                note.style.left = (e.clientX - offset.x) + 'px';
-                note.style.top = (e.clientY - offset.y) + 'px';
-                note.style.right = 'auto'; 
-            });
-            document.addEventListener('mouseup', () => { 
-                setTimeout(() => { isDragging = false; }, 50);
-            });
-        }
-        window.onload = initDrag;
+            function onMouseMove(moveEvent) {
+                if (Math.abs(moveEvent.clientX - startX) > 5 || Math.abs(moveEvent.clientY - startY) > 5) {
+                    isDragging = true;
+                }
+                noteIcon.style.left = (moveEvent.clientX - (startX - noteIcon.offsetLeft)) + 'px';
+                noteIcon.style.top = (moveEvent.clientY - (startY - noteIcon.offsetTop)) + 'px';
+                noteIcon.style.right = 'auto';
+            }
+
+            function onMouseUp() {
+                document.removeEventListener('mousemove', onMouseMove);
+                document.removeEventListener('mouseup', onMouseUp);
+            }
+
+            document.addEventListener('mousemove', onMouseMove);
+            document.addEventListener('mouseup', onMouseUp);
+        });
+
     </script>
 
     <div class="my-pc" onclick="alert('Drive C:/ is locked.')">
@@ -171,13 +189,6 @@
     <div class="power-off" onclick="startRickRoll()">
         <div class="power-circle"><span class="power-symbol">⏻</span></div>
         <div class="power-text" style="color:#ccc; font-size:0.8rem; font-weight:bold; margin-top:8px;">Power</div>
-    </div>
-
-    <div class="notepad-note" onclick="openMateoNote()">
-        <div class="note-icon">
-            <div class="note-lines" style="margin-left: 10px;"></div>
-        </div>
-        <div class="note-text">CLICK ME</div>
     </div>
 
     <div id="root"></div>
@@ -241,6 +252,7 @@
             };
 
             const handleInteraction = (e) => {
+                // DON'T trigger game logic if clicking UI elements
                 if (e.target.closest('.my-pc') || e.target.closest('.power-off') || e.target.closest('.notepad-note') || e.target.closest('#love-popup') || e.target.closest('input')) return;
                 
                 if (won || failed) return;
