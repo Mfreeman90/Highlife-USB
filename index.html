@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Data Crack - OS Terminal Mobile</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Crack - OS Terminal XL</title>
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
@@ -15,170 +15,192 @@
         
         body { 
             margin: 0; background-color: #3e166b; color: white; 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-            min-height: 100vh; overflow-x: hidden;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; height: 100vh; overflow: hidden;
             background-image: radial-gradient(circle, rgba(255,255,255,0.05) 1px, transparent 1px);
             background-size: 40px 40px;
             user-select: none;
-            touch-action: manipulation;
         }
 
-        /* Desktop Icons - Adjusted for touch */
-        .my-pc { position: absolute; top: 20px; left: 20px; display: flex; flex-direction: column; align-items: center; cursor: pointer; z-index: 5; }
-        .pc-icon { width: 45px; height: 55px; background: linear-gradient(to bottom, #7db9e8 0%, #1e5799 100%); border: 2px solid #ffffff; border-radius: 4px; display: flex; justify-content: center; align-items: center; font-size: 1.5rem; }
-        .pc-text { margin-top: 5px; font-weight: bold; text-shadow: 2px 2px 4px black; text-align: center; font-size: 0.7rem; }
+        /* Desktop Icons */
+        .my-pc { position: absolute; top: 40px; left: 40px; display: flex; flex-direction: column; align-items: center; cursor: pointer; z-index: 5; }
+        .pc-icon { width: 55px; height: 65px; background: linear-gradient(to bottom, #7db9e8 0%, #1e5799 100%); border: 2px solid #ffffff; border-radius: 4px; display: flex; justify-content: center; align-items: center; font-size: 1.8rem; }
+        .pc-text { margin-top: 8px; font-weight: bold; text-shadow: 2px 2px 4px black; text-align: center; font-size: 0.9rem; }
 
-        .power-off { position: absolute; top: 20px; right: 20px; display: flex; flex-direction: column; align-items: center; cursor: pointer; z-index: 5; }
-        .power-circle { width: 50px; height: 50px; background: #222; border: 3px solid #ff4444; border-radius: 50%; display: flex; justify-content: center; align-items: center; }
-        .power-symbol { font-size: 1.8rem; color: #ff4444; }
+        .power-off { position: absolute; top: 40px; right: 40px; display: flex; flex-direction: column; align-items: center; cursor: pointer; z-index: 5; }
+        .power-circle { width: 70px; height: 70px; background: #222; border: 4px solid #ff4444; border-radius: 50%; display: flex; justify-content: center; align-items: center; box-shadow: 0 0 20px rgba(255, 68, 68, 0.4); }
+        .power-symbol { font-size: 2.5rem; color: #ff4444; font-weight: bold; }
 
         /* DRAGGABLE NOTEPAD ICON */
         .notepad-note { 
-            position: absolute; top: 120px; right: 20px; 
+            position: absolute; top: 140px; right: 35px; 
             display: flex; flex-direction: column; align-items: center; 
-            touch-action: none; z-index: 5000; width: 80px;
+            cursor: grab; z-index: 5000; width: 100px;
         }
+        .notepad-note:active { cursor: grabbing; }
 
-        .note-icon { width: 40px; height: 50px; background: #fdf5a2; border: 1px solid #999; border-top-right-radius: 10px; position: relative; box-shadow: 2px 2px 0px rgba(0,0,0,0.3); }
-        .note-icon::before { content: ""; position: absolute; top: 0; right: 0; width: 10px; height: 10px; background: #e0e0e0; border-bottom: 1px solid #999; border-left: 1px solid #999; }
-        .note-text { margin-top: 5px; font-weight: bold; font-size: 0.65rem; text-shadow: 2px 2px 4px black; text-align: center; color: white; pointer-events: none; }
+        .note-icon { width: 45px; height: 55px; background: #fdf5a2; border: 1px solid #999; border-top-right-radius: 12px; position: relative; box-shadow: 2px 2px 0px rgba(0,0,0,0.3); }
+        .note-icon::before { content: ""; position: absolute; top: 0; right: 0; width: 12px; height: 12px; background: #e0e0e0; border-bottom: 1px solid #999; border-left: 1px solid #999; }
+        .note-lines { margin-top: 15px; width: 60%; height: 2px; background: #ccc; box-shadow: 0 6px 0 #ccc, 0 12px 0 #ccc; }
+        .note-text { margin-top: 8px; font-weight: bold; font-size: 0.75rem; text-shadow: 2px 2px 4px black; text-align: center; color: white; line-height: 1.1; pointer-events: none; }
 
         /* YELLOW NOTEPAD PAPER POPUP */
         #love-popup {
             display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            width: 90%; max-width: 350px; z-index: 6000; box-shadow: 20px 20px 60px rgba(0,0,0,0.7);
+            width: 350px; z-index: 6000; box-shadow: 20px 20px 60px rgba(0,0,0,0.7);
         }
         .paper {
             background: #fdf5a2; background-image: linear-gradient(#e1d98d 1px, transparent 1px);
-            background-size: 100% 30px; padding: 40px 20px 20px 40px; position: relative;
+            background-size: 100% 30px; padding: 40px 20px 20px 50px; position: relative;
             border: 1px solid #d1d1d1; border-radius: 2px; color: #333; font-family: 'Comic Sans MS', cursive, sans-serif;
             min-height: 200px; line-height: 30px;
         }
-        .paper::before { content: ''; position: absolute; left: 30px; top: 0; height: 100%; width: 2px; background: rgba(255,0,0,0.2); }
-        .close-paper { position: absolute; top: 5px; right: 10px; cursor: pointer; font-weight: bold; color: #cc0000; font-size: 1.5rem; padding: 5px; }
-        .pay-btn { background: #0070ba; color: white; border: none; padding: 12px 20px; font-weight: bold; text-decoration: none; display: inline-block; margin-top: 20px; border-radius: 5px; }
-
-        /* Layout Container */
-        .os-container { 
-            display: flex; flex-direction: column; align-items: center; 
-            width: 100%; min-height: 100vh; padding: 80px 10px 20px 10px; box-sizing: border-box; gap: 20px;
+        .paper::before {
+            content: ''; position: absolute; left: 40px; top: 0; height: 100%; width: 2px;
+            background: rgba(255,0,0,0.2);
         }
+        .close-paper {
+            position: absolute; top: 5px; right: 10px; cursor: pointer; font-weight: bold;
+            color: #cc0000; font-family: sans-serif; font-size: 1.2rem;
+        }
+        .pay-btn { 
+            background: #0070ba; color: white; border: none; padding: 10px 15px; 
+            font-weight: bold; cursor: pointer; text-decoration: none; display: inline-block; 
+            margin-top: 20px; font-family: Arial, sans-serif; border-radius: 5px; line-height: normal;
+        }
+        .pay-btn:hover { background: #005ea6; }
+
+        /* Rick Roll Overlay */
+        #rick-overlay { position: fixed; inset: 0; background: black; z-index: 2000; display: none; flex-direction: column; justify-content: center; align-items: center; }
+
+        /* Wrapper for the windows */
+        .os-container { display: flex; justify-content: center; align-items: center; width: 100vw; height: 100vh; gap: 20px; }
 
         /* Window Styling */
-        .os-window { background: #c0c0c0; border: 3px solid #ffffff; border-right-color: #808080; border-bottom-color: #808080; width: 100%; max-width: 1150px; z-index: 10; }
-        .sidebar-window { max-width: 400px; }
+        .os-window { background: #c0c0c0; border: 3px solid #ffffff; border-right-color: #808080; border-bottom-color: #808080; box-shadow: 15px 15px 40px rgba(0,0,0,0.6); position: relative; z-index: 10; pointer-events: auto; }
+        .game-window { width: 1150px; }
+        .sidebar-window { width: 300px; height: 855px; }
 
-        .os-title-bar { background: linear-gradient(90deg, #000080, #1084d0); padding: 5px 10px; display: flex; justify-content: space-between; align-items: center; color: white; font-weight: bold; font-size: 0.9rem; }
-        .os-btn { width: 20px; height: 20px; background: #c0c0c0; border: 1px solid #ffffff; border-right-color: #404040; border-bottom-color: #404040; color: black; font-size: 10px; display: flex; align-items: center; justify-content: center; }
+        .os-title-bar { background: linear-gradient(90deg, #000080, #1084d0); padding: 6px 10px; display: flex; justify-content: space-between; align-items: center; color: white; font-weight: bold; font-size: 1rem; }
+        .os-controls { display: flex; gap: 4px; }
+        .os-btn { width: 22px; height: 22px; background: #c0c0c0; border: 1px solid #ffffff; border-right-color: #404040; border-bottom-color: #404040; color: black; font-size: 12px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-family: sans-serif; font-weight: bold; }
 
-        .window-content { background-color: #050505; padding: 15px; position: relative; }
-        .header-title { color: #f7931e; font-size: 1.8rem; font-family: 'Orbitron'; font-weight: 900; margin: 0; text-align: center; }
+        .window-content { background-color: #050505; padding: 25px; height: calc(100% - 70px); }
+        .header { border-bottom: 2px solid #f7931e; padding-bottom: 15px; text-align: center; margin-bottom: 25px; display: flex; flex-direction: column; align-items: center;}
+        .header-title { color: #f7931e; font-size: 3.5rem; font-family: 'Orbitron'; font-weight: 900; margin: 0; letter-spacing: 6px; }
+        .sub-header { color: #fdf5a2; font-size: 1rem; font-family: 'Orbitron'; margin-top: 5px; }
 
-        /* Game Viewport - Responsive Scaling */
-        .game-viewport { 
-            position: relative; aspect-ratio: 16/11; width: 100%; 
-            margin: 10px auto; border: 2px solid #ff0000; background-color: #000; overflow: hidden; 
-        }
-        .target-line { position: absolute; width: 100%; height: 10%; background: #ff0000; top: 50%; transform: translateY(-50%); z-index: 1; opacity: 0.7; }
-        .bars-container { display: flex; justify-content: center; align-items: center; height: 100%; gap: 4%; padding: 0 2%; }
+        /* Leaderboard Items */
+        .lb-entry { display: flex; justify-content: space-between; color: #00ff00; font-family: 'Orbitron'; padding: 10px; border-bottom: 1px solid #222; font-size: 0.9rem; }
+        .lb-rank { color: #f7931e; margin-right: 10px; }
+
+        /* Game Viewport */
+        .game-viewport { position: relative; height: 725px; width: 1030px; margin: 0 auto; border: 3px solid #ff0000; background-color: #000; overflow: hidden; }
+        .target-line { position: absolute; width: 100%; height: 35px; background: #ff0000; top: 50%; transform: translateY(-50%); z-index: 1; box-shadow: 0 0 15px rgba(255, 0, 0, 0.6); }
+        .bars-container { display: flex; justify-content: center; align-items: center; height: 100%; gap: 46px; position: relative; z-index: 10; }
         
-        .slider-column { height: 100%; width: 10%; display: flex; flex-direction: column; justify-content: center; }
-        .part { background-color: white; width: 100%; height: 25%; }
-        .spacer { height: 12%; background: transparent; width: 100%; } 
-        .active .part { outline: 2px solid #fdf5a2; box-shadow: 0 0 10px #fdf5a2; }
+        .part { background-color: white; width: 46px; height: 130px; }
+        .spacer { height: 40px; background: transparent; width: 100%; } 
+        .active .part { outline: 4px solid #fdf5a2; box-shadow: 0 0 15px #fdf5a2; }
 
-        /* Overlays */
-        .win-message, .fail-message { position: absolute; inset: 0; z-index: 100; background: rgba(0,0,0,0.9); display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; text-align: center; }
-        .user-input { background: black; border: 1px solid #00ff00; color: #00ff00; font-family: 'Orbitron'; padding: 8px; width: 80%; margin-bottom: 10px; font-size: 1rem; }
-        .action-btn { padding: 10px 25px; font-family: 'Orbitron'; font-size: 1.2rem; cursor: pointer; border: none; }
-
-        /* Leaderboard */
-        .lb-entry { display: flex; justify-content: space-between; color: #00ff00; font-family: 'Orbitron'; padding: 8px; border-bottom: 1px solid #222; font-size: 0.8rem; }
+        .win-message, .fail-message { position: absolute; top: 50%; left: 50%; transform: translate(-50% , -50%); z-index: 100; background: rgba(0,0,0,0.95); padding: 40px; text-align: center; width: 80%; display: flex; flex-direction: column; align-items: center; gap: 15px; font-family: 'Orbitron'; }
+        .win-message { color: #00ff00; border: 4px solid #00ff00; }
+        .fail-message { color: #ff0000; border: 4px solid #ff0000; }
         
-        #rick-overlay { position: fixed; inset: 0; background: black; z-index: 9000; display: none; flex-direction: column; justify-content: center; align-items: center; }
-        iframe { max-width: 100%; }
+        .final-time { font-size: 1.5rem; color: #fff; margin-bottom: 10px; }
+        .action-btn { color: black; border: none; padding: 12px 40px; font-family: 'Orbitron'; font-size: 1.8rem; cursor: pointer; font-weight: 900; border-radius: 4px; }
+        .win-btn { background: #00ff00; }
+        .fail-btn { background: #ff0000; }
 
-        @media (min-width: 1000px) {
-            .os-container { flex-direction: row; align-items: flex-start; justify-content: center; padding-top: 100px; }
-            .sidebar-window { height: 600px; width: 300px; }
-            .header-title { font-size: 3rem; }
-        }
+        .user-input { background: black; border: 2px solid #00ff00; color: #00ff00; font-family: 'Orbitron'; padding: 10px; text-align: center; font-size: 1.2rem; outline: none; margin-bottom: 10px; width: 250px; }
     </style>
 </head>
 <body>
 
     <div id="rick-overlay">
-        <h2 style="font-family: Orbitron; color: #ff4444; text-align:center;">SYSTEM OVERLOAD</h2>
+        <h1 style="font-family: Orbitron; color: #ff4444; margin-bottom: 20px;">SYSTEM OVERLOAD</h1>
         <div id="video-container"></div>
-        <button class="action-btn" style="background:#ff4444; margin-top:20px;" onclick="stopRickRoll()">REBOOT</button>
+        <button class="action-btn fail-btn" style="margin-top: 20px;" onclick="stopRickRoll()">REBOOT SYSTEM</button>
     </div>
 
     <div id="love-popup">
         <div class="paper">
-            <div class="close-paper" onclick="document.getElementById('love-popup').style.display='none'">×</div>
-            <div style="font-size: 1.2rem; font-weight:bold;">Mateo Strap loves you!</div>
-            <div style="font-size: 1rem; margin-top: 5px;">Buy me a coffee if you'd like</div>
+            <div class="close-paper" onclick="document.getElementById('love-popup').style.display='none'">X</div>
+            <div style="font-size: 1.3rem;">Mateo Strap loves you!</div>
+            <div style="font-size: 1.1rem; margin-top: 10px;">Buy me a coffee if you'd like</div>
             <a href="https://paypal.me/Mfreeman90" target="_blank" class="pay-btn">Support on PayPal</a>
         </div>
     </div>
 
-    <div class="my-pc" onclick="alert('System Locked')">
+    <div class="my-pc" onclick="alert('Drive C:/ is locked.')">
         <div class="pc-icon">💽</div>
-        <div class="pc-text">My PC</div>
+        <div class="pc-text">My Computer</div>
     </div>
 
     <div class="power-off" onclick="startRickRoll()">
         <div class="power-circle"><span class="power-symbol">⏻</span></div>
+        <div class="power-text" style="color:#ccc; font-size:0.8rem; font-weight:bold; margin-top:8px;">Power</div>
     </div>
 
     <div class="notepad-note" id="notepad-icon">
-        <div class="note-icon"></div>
-        <div class="note-text">OPEN ME</div>
+        <div class="note-icon">
+            <div class="note-lines" style="margin-left: 10px;"></div>
+        </div>
+        <div class="note-text">CLICK ME</div>
     </div>
 
-    <div id="root"></div>
-
     <script>
-        // DRAG LOGIC (Pointer Events for Mobile)
-        const note = document.getElementById('notepad-icon');
-        let isDragging = false;
-        let dragTimer;
-
-        note.onpointerdown = function(e) {
-            isDragging = false;
-            let shiftX = e.clientX - note.getBoundingClientRect().left;
-            let shiftY = e.clientY - note.getBoundingClientRect().top;
-
-            function moveAt(pageX, pageY) {
-                note.style.left = pageX - shiftX + 'px';
-                note.style.top = pageY - shiftY + 'px';
-                note.style.right = 'auto';
-            }
-
-            function onPointerMove(e) {
-                isDragging = true;
-                moveAt(e.pageX, e.pageY);
-            }
-
-            document.addEventListener('pointermove', onPointerMove);
-
-            note.onpointerup = function() {
-                document.removeEventListener('pointermove', onPointerMove);
-                note.onpointerup = null;
-                if (!isDragging) document.getElementById('love-popup').style.display = 'block';
-            };
-        };
-        note.ondragstart = function() { return false; };
-
         function startRickRoll() {
-            document.getElementById('video-container').innerHTML = '<iframe width="320" height="180" src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1" frameborder="0" allow="autoplay"></iframe>';
+            const container = document.getElementById('video-container');
+            container.innerHTML = '<iframe width="854" height="480" src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1&controls=0" frameborder="0" allow="autoplay; encrypted-media"></iframe>';
             document.getElementById('rick-overlay').style.display = 'flex';
         }
         function stopRickRoll() {
             document.getElementById('video-container').innerHTML = '';
             document.getElementById('rick-overlay').style.display = 'none';
         }
+
+        // IMPROVED DRAGGING & CLICKING LOGIC
+        const noteIcon = document.getElementById('notepad-icon');
+        let isMoving = false;
+        let startX, startY, initialX, initialY;
+
+        noteIcon.addEventListener('mousedown', (e) => {
+            isMoving = false;
+            startX = e.clientX;
+            startY = e.clientY;
+            initialX = noteIcon.offsetLeft;
+            initialY = noteIcon.offsetTop;
+
+            function onMouseMove(ev) {
+                const dx = ev.clientX - startX;
+                const dy = ev.clientY - startY;
+                if (Math.abs(dx) > 5 || Math.abs(dy) > 5) {
+                    isMoving = true;
+                }
+                noteIcon.style.left = (initialX + dx) + 'px';
+                noteIcon.style.top = (initialY + dy) + 'px';
+                noteIcon.style.right = 'auto';
+            }
+
+            function onMouseUp() {
+                document.removeEventListener('mousemove', onMouseMove);
+                document.removeEventListener('mouseup', onMouseUp);
+            }
+
+            document.addEventListener('mousemove', onMouseMove);
+            document.addEventListener('mouseup', onMouseUp);
+        });
+
+        noteIcon.addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (!isMoving) {
+                document.getElementById('love-popup').style.display = 'block';
+            }
+        });
+
     </script>
+
+    <div id="root"></div>
 
     <script type="text/babel">
         const { useState, useEffect, useRef } = React;
@@ -190,104 +212,162 @@
             const [startTime, setStartTime] = useState(null);
             const [finalTime, setFinalTime] = useState(null);
             const [userName, setUserName] = useState('');
-            const [leaderboard, setLeaderboard] = useState(JSON.parse(localStorage.getItem('dataCrack_Mob')) || []);
+            const [leaderboard, setLeaderboard] = useState(JSON.parse(localStorage.getItem('dataCrackLB_Extended')) || []);
             
-            const bars = [0, 1, 2, 3, 4, 5]; 
+            const bars = [0, 1, 2, 3, 4, 5, 6]; 
             const refs = useRef(bars.map(() => React.createRef()));
             const animations = useRef([]);
+            const audioCtx = useRef(null);
+
+            const playHitSound = () => {
+                if (!audioCtx.current) audioCtx.current = new (window.AudioContext || window.webkitAudioContext)();
+                if (audioCtx.current.state === 'suspended') audioCtx.current.resume();
+                const osc = audioCtx.current.createOscillator();
+                const gain = audioCtx.current.createGain();
+                osc.type = 'square';
+                osc.frequency.setValueAtTime(800, audioCtx.current.currentTime);
+                gain.gain.setValueAtTime(0.1, audioCtx.current.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.current.currentTime + 0.1);
+                osc.connect(gain);
+                gain.connect(audioCtx.current.destination);
+                osc.start();
+                osc.stop(audioCtx.current.currentTime + 0.1);
+            };
 
             const initGame = () => {
+                if (!audioCtx.current) audioCtx.current = new (window.AudioContext || window.webkitAudioContext)();
                 animations.current.forEach(anim => anim && anim.pause());
                 animations.current = bars.map((i) => {
+                    let speed = 750 - (i * 90);
+                    if (i === 5) speed = 350; if (i === 6) speed = 280; 
                     return anime({
-                        targets: `#col-${i}`, translateY: ['-25%', '25%'],
-                        duration: 800 - (i * 100), direction: 'alternate',
-                        loop: true, easing: 'easeInOutSine', autoplay: true
+                        targets: `#col-${i}`, translateY: [-200, 200], duration: speed,
+                        direction: 'alternate', loop: true, easing: 'easeInOutSine', autoplay: true
                     });
                 });
             };
 
             useEffect(() => { initGame(); }, []);
 
-            const handleAction = (e) => {
-                if (e.target.closest('.notepad-note') || e.target.closest('#love-popup') || e.target.closest('input') || e.target.closest('button')) return;
-                if (won || failed) return;
+            const saveScore = () => {
+                const name = userName.trim() || "ANONYMOUS";
+                const newEntry = { name, time: parseFloat(finalTime) };
+                const updatedLB = [...leaderboard, newEntry]
+                    .sort((a, b) => a.time - b.time)
+                    .slice(0, 15);
+                setLeaderboard(updatedLB);
+                localStorage.setItem('dataCrackLB_Extended', JSON.stringify(updatedLB));
+                resetGame();
+            };
 
-                if (activeIndex === 0 && !startTime) setStartTime(Date.now());
+            const handleInteraction = (e) => {
+                if (e.target.closest('.my-pc') || e.target.closest('.power-off') || e.target.closest('.notepad-note') || e.target.closest('#love-popup') || e.target.closest('input')) return;
                 
+                if (won || failed) return;
+                if (activeIndex === 0 && !startTime) setStartTime(Date.now());
                 const targetRect = document.querySelector('.target-line').getBoundingClientRect();
                 const spacerRect = refs.current[activeIndex].current.getBoundingClientRect();
-                const isHit = Math.abs((spacerRect.top + spacerRect.height/2) - (targetRect.top + targetRect.height/2)) < (targetRect.height/2 + 10);
+                
+                const isHit = Math.abs((spacerRect.top + spacerRect.height/2) - (targetRect.top + targetRect.height/2)) < 35;
 
                 if (isHit) {
+                    playHitSound();
                     animations.current[activeIndex].pause();
-                    if (activeIndex === bars.length - 1) {
-                        setFinalTime(((Date.now() - startTime) / 1000).toFixed(2));
+                    anime({ targets: `#col-${activeIndex}`, translateY: 0, duration: 40 });
+                    if (activeIndex === 6) {
+                        const timeTaken = ((Date.now() - startTime) / 1000).toFixed(2);
+                        setFinalTime(timeTaken);
                         setWon(true);
                     } else {
                         setActiveIndex(activeIndex + 1);
                     }
                 } else {
-                    setFailed(true);
-                    animations.current.forEach(a => a.pause());
+                    if (activeIndex === 0) {
+                        setFailed(true);
+                        animations.current.forEach(a => a.pause());
+                    } else {
+                        animations.current[activeIndex - 1].play();
+                        setActiveIndex(activeIndex - 1);
+                    }
                 }
             };
 
-            const reset = () => {
-                setWon(false); setFailed(false); setActiveIndex(0); setStartTime(null);
+            const resetGame = () => {
+                setWon(false); setFailed(false); setActiveIndex(0); setStartTime(null); setFinalTime(null); setUserName('');
+                bars.forEach(i => anime({ targets: `#col-${i}`, translateY: 0, duration: 0 }));
                 setTimeout(initGame, 50);
             };
 
-            const save = () => {
-                const updated = [...leaderboard, {name: userName || 'ANON', time: finalTime}].sort((a,b)=>a.time-b.time).slice(0,10);
-                setLeaderboard(updated);
-                localStorage.setItem('dataCrack_Mob', JSON.stringify(updated));
-                reset();
-            };
+            useEffect(() => {
+                window.addEventListener('mousedown', handleInteraction);
+                return () => window.removeEventListener('mousedown', handleInteraction);
+            }, [activeIndex, won, failed, startTime, leaderboard, userName]);
 
             return (
-                <div className="os-container" onPointerDown={handleAction}>
-                    <div className="os-window">
+                <div className="os-container">
+                    <div className="os-window game-window">
                         <div className="os-title-bar">
-                            <span>DATACRACK.EXE</span>
-                            <div className="os-btn">X</div>
+                            <span>C:\WINDOWS\System32\datacrack.exe</span>
+                            <div className="os-controls">
+                                <div className="os-btn">_</div>
+                                <div className="os-btn">□</div>
+                                <div className="os-btn" onClick={() => alert('Access Denied')}>X</div>
+                            </div>
                         </div>
                         <div className="window-content">
-                            <h1 className="header-title">DATA CRACK</h1>
+                            <div className="header">
+                                <h1 className="header-title">DATA CRACK</h1>
+                                <div className="sub-header">SYSTEM ACCESS LOG: ACTIVE CONNECTION</div>
+                            </div>
                             <div className="game-viewport">
-                                <div className="target-line"></div>
+                                <div className="target-line" />
                                 <div className="bars-container">
-                                    {bars.map(i => (
-                                        <div key={i} id={`col-${i}`} className={`slider-column ${i===activeIndex?'active':''}`}>
-                                            <div className="part"></div>
-                                            <div className="spacer" ref={refs.current[i]}></div>
-                                            <div className="part"></div>
+                                    {bars.map((i) => (
+                                        <div key={i} id={`col-${i}`} className={`slider-column ${i === activeIndex ? 'active' : ''}`}>
+                                            <div className="part" /><div className="spacer" ref={refs.current[i]} /><div className="part" />
                                         </div>
                                     ))}
                                 </div>
-                                {won && <div className="win-message">
-                                    <h2 style={{color:'#0f0'}}>SUCCESS</h2>
-                                    <p>{finalTime}s</p>
-                                    <input className="user-input" onChange={e=>setUserName(e.target.value)} placeholder="NAME" />
-                                    <button className="action-btn" style={{background:'#0f0'}} onClick={save}>SAVE</button>
-                                </div>}
-                                {failed && <div className="fail-message">
-                                    <h2 style={{color:'#f00'}}>FAILED</h2>
-                                    <button className="action-btn" style={{background:'#f00'}} onClick={reset}>RETRY</button>
-                                </div>}
+                                {won && (
+                                    <div className="win-message">
+                                        <h2 style={{fontSize:'4rem', margin:0}}>DECRYPTED</h2>
+                                        <div className="final-time">TIME: {finalTime} SECONDS</div>
+                                        <input 
+                                            className="user-input"
+                                            placeholder="USER NAME"
+                                            maxLength="12"
+                                            value={userName}
+                                            onChange={(e) => setUserName(e.target.value.toUpperCase())}
+                                            autoFocus
+                                        />
+                                        <button className="action-btn win-btn" onClick={saveScore}>SUBMIT LOG</button>
+                                    </div>
+                                )}
+                                {failed && (
+                                    <div className="fail-message">
+                                        <h2 style={{fontSize:'4rem', margin:0}}>LOCKED OUT</h2>
+                                        <button className="action-btn fail-btn" onClick={resetGame}>RETRAIN</button>
+                                    </div>
+                                )}
                             </div>
                         </div>
                     </div>
 
                     <div className="os-window sidebar-window">
-                        <div className="os-title-bar"><span>LEADERBOARD</span></div>
-                        <div className="window-content">
-                            {leaderboard.map((e,i) => (
-                                <div key={i} className="lb-entry">
-                                    <span>#{i+1} {e.name}</span>
-                                    <span>{e.time}s</span>
+                        <div className="os-title-bar">
+                            <span>RECORDS.LOG</span>
+                            <div className="os-controls">
+                                <div className="os-btn">X</div>
+                            </div>
+                        </div>
+                        <div className="window-content" style={{overflowY: 'auto'}}>
+                            <div style={{color: '#fdf5a2', textAlign: 'center', marginBottom: '15px', fontFamily: 'Orbitron'}}>TOP UPLOADS</div>
+                            {leaderboard.length > 0 ? leaderboard.map((entry, idx) => (
+                                <div key={idx} className="lb-entry">
+                                    <span><span className="lb-rank">#{idx+1}</span> {entry.name}</span>
+                                    <span>{entry.time}s</span>
                                 </div>
-                            ))}
+                            )) : <div style={{textAlign:'center', opacity:0.5}}>NO DATA</div>}
                         </div>
                     </div>
                 </div>
